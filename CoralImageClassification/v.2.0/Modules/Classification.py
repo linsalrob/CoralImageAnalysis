@@ -1,5 +1,7 @@
 
 import sys
+import re
+import os
 
 
 '''
@@ -50,13 +52,15 @@ class Parsers:
             if inassignment:
                 parts=line.split('::')
                 path=parts[0].split('\\')
-                filename=os.path.join(path)
+                filename=os.path.join(path[0], path[1])
                 m=re.search('d.*\)\s*(\d+)\s*(\S*);', parts[1])
-                if m.group(1) & m.group(2):
+                if m == None:
+                    continue
+                if (m.group(1) != '') & (m.group(2) != ''):
                     classification[filename]=assignment[m.group(1) + m.group(2)]
-                elif m.group(1):
+                elif m.group(1) != '':
                     classification[filename]=assignment[m.group(1)]
-                elif m.group(2):
+                elif m.group(2) != '':
                     sys.stderr.write("Error while parsing " + parts[1])
             else:
                 line = line.lstrip()
