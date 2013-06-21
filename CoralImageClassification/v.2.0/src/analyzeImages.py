@@ -34,6 +34,9 @@ stats = Stats()
 # The FFT class has energy()
 fft = FFT()
 
+# the Laplacian class calculates the laplacian
+lap = Laplacian()
+
 # Edges has CAnny
 edge = Edges()
 
@@ -50,12 +53,17 @@ if args.file:
 
 print ('\t'.join(map(str, ["Image File", "Classification", 
        "grayMin", "grayMax", "grayMedian", "grayMean", 
-       "grayNormalizedMin", "grayNormalizedMax", "grayNormalizedMedian", "grayNormalizedMean", 
+       "gnMin", "gnMax", "gnMedian", "gnMean", 
        "blueMin", "blueMax", "blueMedian", "blueMean", 
        "greenMin", "greenMax", "greenMedian", "greenMean", 
        "redMin", "redMax", "redMedian", "redMean", 
-       "FFT",
-       "Edge length"])))
+       "FFT", "nFFT"]))), "\t",
+for i in range(15):
+    print "Lapl", (2*i+1), "\t",
+
+for i in range(25):
+    print "Can1.", (10*i), "\t",
+print
 
 images = os.listdir(args.directory)
 for imgfile in images:
@@ -70,12 +78,22 @@ for imgfile in images:
     img = ImageIO.cv2read(os.path.join(args.directory, imgfile))
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     print ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))), "\t",
-    
-    gray = Normalization.equalizeHistograms(gray)
-    print ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))), "\t",
+
+    ngray = Normalization.equalizeHistograms(gray)
+    print ('\t'.join(map(str, [stats.min(ngray), stats.max(ngray), stats.median(ngray), stats.mean(ngray)]))), "\t",
 
     for i in range(3):
         imp = img[:,:,i]
         print ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))), "\t",
-    print fft.energy(gray), "\t",  edge.sumCanny(gray)
+    print fft.energy(gray), "\t", fft.energy(ngray), "\t",
+
+    for i in range(15):
+        k=2*i+1
+        print lap.sum(gray, k), "\t",
+
+    for i in range(25):
+        t2 = 10*i
+        print edge.sumCanny(gray, 1, t2), "\t",
+    #edge.sumCanny(gray)
+    print
 

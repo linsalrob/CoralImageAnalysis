@@ -98,6 +98,23 @@ class Features:
             self.detect_kp(img)
         return self.he
 
+class Laplacian:
+    '''Calculate the Laplacian (2nd derivative) of the image.
+    The kernel size must be an odd number between 1 and 31. 
+    Seven or nine seem like good defaults.'''
+
+    def calculate(self, img, kernel, ddepth=cv2.CV_16U):
+        gray = img
+        if len(img.shape) > 2:
+            gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        return cv2.Laplacian(gray,ddepth,ksize = kernel)
+
+    def sum(self, img, kernel=9):
+        gl = self.calculate(img, kernel, cv2.CV_16U)
+        # count the number of points > 1 (i.e. that are edges)
+        glo = gl > 10
+        # return the number of True points
+        return numpy.sum(glo)
 
 class Edges:
     '''Various edge detection techniques'''
