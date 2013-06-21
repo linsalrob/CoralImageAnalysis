@@ -68,10 +68,10 @@ print
 
 images = os.listdir(args.directory)
 for imgfile in images:
-    if os.path.isdir(imgfile):
+    if os.path.isdir(os.path.join(args.directory, imgfile)):
         temp = os.listdir(os.path.join(args.directory, imgfile))
         for f in temp:
-            images.append(os.path.join(imgfile, f)
+            images.append(os.path.join(imgfile, f))
         continue
     if not args.all and imgfile not in classification:
         continue
