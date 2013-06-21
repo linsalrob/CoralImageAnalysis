@@ -6,6 +6,7 @@ import Normalization
 from Analysis import *
 import argparse
 import cv2
+import Classification
 
 
 '''
@@ -49,6 +50,7 @@ if args.file:
         classification = classifier.tab()
     else:
         classification = classifier.zawada()
+
 
 print ('\t'.join(map(str, ["Image File", "Classification", 
        "grayMin", "grayMax", "grayMedian", "grayMean", 
