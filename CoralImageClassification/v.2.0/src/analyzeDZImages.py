@@ -7,6 +7,7 @@ from Analysis import *
 import argparse
 import cv2
 import Classification
+import Contours
 
 
 '''
@@ -42,6 +43,7 @@ lap = Laplacian()
 # Edges has CAnny
 edge = Edges()
 
+# we initialize contours later so we can set the image
 
 classification = {}
 if args.file:
@@ -58,12 +60,17 @@ print ('\t'.join(map(str, ["Image File", "Classification",
        "blueMin", "blueMax", "blueMedian", "blueMean", 
        "greenMin", "greenMax", "greenMedian", "greenMean", 
        "redMin", "redMax", "redMedian", "redMean", 
-       "FFT", "nFFT"]))), "\t",
+       "FFT", "nFFT",]))), "\t",
 for i in range(15):
     print "Lapl", (2*i+1), "\t",
 
 for i in range(25):
     print "Can1.", (10*i), "\t",
+
+for i in range(5):
+    t=50*i
+    print "Contours", t, "\tClosedCont", t, "\tOpenCont", t, "\tContArea", t, "\tLargestCont", t, "\tPerimeter", t, "\t"
+
 print
 
 images = os.listdir(args.directory)
@@ -101,5 +108,14 @@ for imgfile in images:
         t2 = 10*i
         print edge.sumCanny(gray, 1, t2), "\t",
     #edge.sumCanny(gray)
+
+    # Contour detection
+    contours = Contours.contours(g)
+    for i in range(5):
+        threshold=50*i
+        contours.withCanny(1, threshold)
+        print "\t".join(map(str, [threshold, contours.numberOfContours(), contours.numberOfClosedContours(),
+                                  contours.numberOfOpenContours(), contours.totalContourArea(), cv2.contourArea(contours.largestContourByArea()),
+                                  contours.totalPerimeterLength()])), "\t",
     print
 
