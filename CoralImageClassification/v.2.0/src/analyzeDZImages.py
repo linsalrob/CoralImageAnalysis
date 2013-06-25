@@ -95,6 +95,8 @@ for imgfile in images:
     print ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))), "\t",
 
     ngray = Normalization.equalizeHistograms(gray)
+    # apply a gaussian blur to remove edge effects
+    ngray = cv2.GaussianBlur(ngray, (3,3), 0)
     print ('\t'.join(map(str, [stats.min(ngray), stats.max(ngray), stats.median(ngray), stats.mean(ngray)]))), "\t",
 
     for i in range(3):
