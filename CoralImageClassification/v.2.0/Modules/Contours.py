@@ -139,7 +139,7 @@ class contours:
             self.findLines()
 
         lengtharr=[]
-        for xy in self.lines:
+        for xy in self.lines[0]:
             xyv = xy.reshape(2,2)
             length = numpy.linalg.norm(xyv[0]-xyv[1])
             lengtharr.append(length)
@@ -149,33 +149,24 @@ class contours:
 
     def medianLineLength(self):
         '''Return the median line length for all the lines in the image'''
-        if self.linelen == None:
-            self.linelengths()
         if len(self.linelen) == 0: return 0
         return numpy.median(self.linelen)
 
     def meanLineLength(self):
         '''Return the mean line length for all the lines in the image'''
-        if self.linelen == None:
-            self.linelengths()
         if len(self.linelen) == 0: return 0
         return numpy.mean(self.linelen)
 
 
     def modeLineLength(self):
         '''Return the modal line length for all the lines in the image'''
-        if self.linelen == None:
-            self.linelengths()
-
         if len(self.linelen) == 0: return 0
-        counts = numpy.bincount(self.linelen)
+        ints = numpy.rint(self.linelen).astype(int)
+        counts = numpy.bincount(ints)
         return numpy.argmax(counts)
 
     def maxLineLength(self):
         '''Return the modal line length for all the lines in the image'''
-        if self.linelen == None:
-            self.linelengths()
-
         if len(self.linelen) == 0: return 0
         return numpy.max(self.linelen)
 
