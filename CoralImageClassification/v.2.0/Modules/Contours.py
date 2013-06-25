@@ -17,13 +17,16 @@ class contours:
             self.image=cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         else:
             self.image=image
+        self.can = None
         self.contours = None
         self.hierarchy = None
+        self.lines = None
+        self.linelen = numpy.array([])
 
     def withCanny(self, threshold1=1, threshold2=255):
         '''Use Canny edge detection to find the contours in an image.'''
         # detect the edges with Canny edge detection
-        can = cv2.Canny(self.image, threshold1, threshold2)
+        self.can = cv2.Canny(self.image, threshold1, threshold2)
         # extract the contours and the hierarcy of those contours
         # The second argument can be one of:
         #     RETR_EXTERNAL retrieves only the extreme outer contours; It will set hierarchy[i][2]=hierarchy[i][3]=-1 for all the contours
@@ -34,7 +37,7 @@ class contours:
         #     CHAIN_APPROX_NONE stores absolutely all the contour points
         #     CHAIN_APPROX_SIMPLE compresses horizontal, vertical, and diagonal segments and leaves only their end points. E.g. an up-right rectangular contour will be encoded with 4 points
         #     CHAIN_APPROX_TC89_L1 or CV_CHAIN_APPROX_TC89_KCOS
-        self.contours, self.hierarchy = cv2.findContours(can, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        self.contours, self.hierarchy = cv2.findContours(self.can, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     def numberOfContours(self):
         '''The number of contours in the image'''
@@ -121,6 +124,57 @@ class contours:
         return length
 
 
+    def findLines(self):
+        '''Find the lines associated with an image. 
+        Returns an array of array's of X1,Y1,X2,Y2 legths.
+        This will most likely be used as an internal method.'''
+        if self.can == None:
+            self.withCanny()
+        self.lines = cv2.HoughLinesP(self.can, 1, numpy.pi/180, 40, minLineLength=10)
+        return self.lines
+
+    def linelengths(self):
+        '''Return an array of line lengths for all the lines detected by the Hough transform.'''
+        if self.lines == None:
+            self.findLines()
+
+        lengtharr=[]
+        for xy in self.lines:
+            xyv = xy.reshape(2,2)
+            length = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(length)
+
+        self.linelen = numpy.array(lengtharr)
+
+        return self.linelen
+
+    def medianLineLength(self):
+        '''Return the median line length for all the lines in the image'''
+        if self.linelen == None:
+            self.linelengths()
+        return numpy.median(self.linelen)
+
+    def meanLineLength(self):
+        '''Return the mean line length for all the lines in the image'''
+        if self.linelen == None:
+            self.linelengths()
+        return numpy.mean(self.linelen)
+
+
+    def modeLineLength(self):
+        '''Return the modal line length for all the lines in the image'''
+        if self.linelen == None:
+            self.linelengths()
+
+        counts = numpy.bincount(self.linelen)
+        return numpy.argmax(counts)
+
+    def maxLineLength(self):
+        '''Return the modal line length for all the lines in the image'''
+        if self.linelen == None:
+            self.linelengths()
+
+        return numpy.max(self.linelen)
 
 
 

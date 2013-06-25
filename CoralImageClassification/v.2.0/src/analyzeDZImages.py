@@ -69,7 +69,9 @@ for i in range(25):
 
 for i in range(5):
     t=50*i
-    print "Contours", t, "\tClosedCont", t, "\tOpenCont", t, "\tContArea", t, "\tLargestCont", t, "\tPerimeter", t, "\t",
+    print "Contours",+str(t), "\tClosedCont",+str(t), "\tOpenCont",+str(t), "\tContArea",+str(t), "\tLargestCont",+str(t), "\tPerimeter",+str(t), "\t",
+    print "MaxLL"+str(t), "\tMeanLL",+str(t), "\tMedianLL",+str(t), "\tModeLL",+str(t), "\t",
+
 
 print
 
@@ -110,17 +112,18 @@ for imgfile in images:
     #edge.sumCanny(gray)
 
     # Contour detection
-    contours = Contours.contours(ngray)
+    ctr = Contours.contours(ngray)
     for i in range(5):
         threshold=50*i
-        contours.withCanny(1, threshold)
-        if contours.numberOfContours() == 0:
+        ctr.withCanny(1, threshold)
+        if ctr.numberOfContours() == 0:
             print "0\t0\t0\t0\t0\t0\t"
         else:
             try:
-                print "\t".join(map(str, [contours.numberOfContours(), contours.numberOfClosedContours(),
-                                      contours.numberOfOpenContours(), contours.totalContourArea(), cv2.contourArea(contours.largestContourByArea()),
-                                      contours.totalPerimeterLength()])), "\t",
+                print "\t".join(map(str, [ctr.numberOfContours(), ctr.numberOfClosedContours(),
+                                      ctr.numberOfOpenContours(), ctr.totalContourArea(), cv2.contourArea(ctr.largestContourByArea()),
+                                      ctr.totalPerimeterLength()])), "\t",
+                print "\t".join(map(str, [ctr.maxLineLength(), ctr.meanLineLength(), ctr.medianLineLength(), ctr.modeLineLength()])), "\t",
             except:
                 sys.stderr.write("There was an error calculating the contours for " + imgfile +"\n")
                 break
