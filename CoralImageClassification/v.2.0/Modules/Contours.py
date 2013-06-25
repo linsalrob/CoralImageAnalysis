@@ -130,7 +130,7 @@ class contours:
         This will most likely be used as an internal method.'''
         if self.can == None:
             self.withCanny()
-        self.lines = cv2.HoughLinesP(self.can, 1, numpy.pi/180, 40, minLineLength=10)
+        self.lines = cv2.HoughLinesP(self.can, 1, numpy.pi/180, 40, minLineLength=5)
         return self.lines
 
     def linelengths(self):
@@ -145,19 +145,20 @@ class contours:
             lengtharr.append(length)
 
         self.linelen = numpy.array(lengtharr)
-
         return self.linelen
 
     def medianLineLength(self):
         '''Return the median line length for all the lines in the image'''
         if self.linelen == None:
             self.linelengths()
+        if len(self.linelen) == 0: return 0
         return numpy.median(self.linelen)
 
     def meanLineLength(self):
         '''Return the mean line length for all the lines in the image'''
         if self.linelen == None:
             self.linelengths()
+        if len(self.linelen) == 0: return 0
         return numpy.mean(self.linelen)
 
 
@@ -166,6 +167,7 @@ class contours:
         if self.linelen == None:
             self.linelengths()
 
+        if len(self.linelen) == 0: return 0
         counts = numpy.bincount(self.linelen)
         return numpy.argmax(counts)
 
@@ -174,6 +176,7 @@ class contours:
         if self.linelen == None:
             self.linelengths()
 
+        if len(self.linelen) == 0: return 0
         return numpy.max(self.linelen)
 
 
