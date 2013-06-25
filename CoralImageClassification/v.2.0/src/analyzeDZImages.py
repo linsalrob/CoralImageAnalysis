@@ -117,12 +117,13 @@ for imgfile in images:
         threshold=50*i
         ctr.withCanny(1, threshold)
         if ctr.numberOfContours() == 0:
-            print "0\t0\t0\t0\t0\t0\t"
+            print "0\t0\t0\t0\t0\t0\t0\t0\t0\t0"
         else:
             try:
                 print "\t".join(map(str, [ctr.numberOfContours(), ctr.numberOfClosedContours(),
                                       ctr.numberOfOpenContours(), ctr.totalContourArea(), cv2.contourArea(ctr.largestContourByArea()),
                                       ctr.totalPerimeterLength()])), "\t",
+                ctr.linelengths()
                 print "\t".join(map(str, [ctr.maxLineLength(), ctr.meanLineLength(), ctr.medianLineLength(), ctr.modeLineLength()])), "\t",
             except ValueError as e:
                 sys.stderr.write("There was an error calculating the contours for " + imgfile +": " + e.message + "\n")
