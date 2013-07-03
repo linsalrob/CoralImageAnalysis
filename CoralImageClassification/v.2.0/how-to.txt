@@ -1,0 +1,24 @@
+1. We start by generating the data from the images that we already know.
+
+This takes the directory with all the files (or subdirectories straight from ATRIS) and the file that has Dave's format for the classifications. We output a tab separated matrix
+
+python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt  > WLH1.output.txt
+
+Note that we also do this for all the images, and we will use these later in the analysis
+
+python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a > WLH1.allimages.txt
+
+2. We import that data into R and use the randomForest to classify the images. At this point, we can also plot the prediction of these images.
+
+Rscript ../src/randomForest.r WLH1.output.txt
+
+This creates a variable importance plot in the folder called png, and also creates the output file called 'WLH1.output.txt.probabilities.txt'. This latter file has the predictions of those images.
+
+3. Next, we use python and matplotlib to plot the probability of classification using an average of 20 images in a sliding window:
+
+python ../src/plot_predictions.py -f WLH1.output.txt.probabilities.txt -o WLH1.png
+
+
+4: TODO
+
+I need to write the Rscript to take the randomForest and predict the outcome for all images.
