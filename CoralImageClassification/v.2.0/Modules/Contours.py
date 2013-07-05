@@ -37,7 +37,8 @@ class contours:
         #     CHAIN_APPROX_NONE stores absolutely all the contour points
         #     CHAIN_APPROX_SIMPLE compresses horizontal, vertical, and diagonal segments and leaves only their end points. E.g. an up-right rectangular contour will be encoded with 4 points
         #     CHAIN_APPROX_TC89_L1 or CV_CHAIN_APPROX_TC89_KCOS
-        self.contours, self.hierarchy = cv2.findContours(self.can, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        ## self.contours, self.hierarchy = cv2.findContours(self.can, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        self.contours, self.hierarchy = cv2.findContours(self.can, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     def numberOfContours(self):
         '''The number of contours in the image'''
