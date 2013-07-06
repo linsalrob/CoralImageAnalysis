@@ -83,7 +83,11 @@ else:
            "blueMin", "blueMax", "blueMedian", "blueMean", 
            "greenMin", "greenMax", "greenMedian", "greenMean", 
            "redMin", "redMax", "redMedian", "redMean", 
-           "FFT", "nFFT",]))) +"\t")
+           "FFT", "nFFT", "NumKeyPoints", "MedianKPSize", "MeanKPSize"]))) +"\t")
+    
+    for i in range(15):
+        fout.write( "KPsOver" + str(10*i) + "\t")
+
     for i in range(15):
         fout.write( "Lapl" + str(2*i+1) + "\t")
 
@@ -145,6 +149,12 @@ for imgfile in images:
         fout.write( ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))) + "\t" )
     fout.write( str(fft.energy(gray)) + "\t" + str(fft.energy(ngray)) + "\t")
 
+    feats.detect_kp_ORB(ngray)
+    fout.write( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t")
+
+    for i in range(15):
+        fout.write( str(feats.numKeyPoints(i*10)) + "\t")
+    
     for i in range(15):
         k=2*i+1
         fout.write( str(lap.sum(ngray, k)) + "\t")
