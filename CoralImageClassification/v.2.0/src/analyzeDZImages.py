@@ -21,7 +21,7 @@ the image we will print that out too.
 
 parser = argparse.ArgumentParser(description='Analyze a series of images.')
 parser.add_argument('-d', '--directory', help='The directory of images to analyse', required=True)
-parser.add_argument('-f', '--file', help='File of images and their classifications')
+parser.add_argument('-f', '--file', help='File of images and their classifications', action='append')
 parser.add_argument('-t', '--tab', help='Classification is tab separated text (default: Zawada format)')
 parser.add_argument('-a', '--all', help='Process all files (otherwise only those in the classification file are processed). If no file is given, this is assumed', action='store_true')
 parser.add_argument('-o', '--output', help='The output file. If this file exists, images in the file will be skipped and the file will be appended', required=True)
@@ -49,11 +49,16 @@ edge = Edges()
 # initiate and run the classification if needed
 classification = {}
 if args.file:
-    classifier = Classification.Parsers(args.file)
-    if args.tab:
-        classification = classifier.tab()
-    else:
-        classification = classifier.zawada()
+    for f in args.file:
+        sys.stderr.write("Parsing the classifications in " + f + "\n")
+        classifier = Classification.Parsers(f)
+        newclass={}
+        if args.tab:
+            newclass = classifier.tab()
+        else:
+            newclass = classifier.zawada()
+        for c in newclass:
+            classification[c] = newclass[c]
 
 
 # set up the output file

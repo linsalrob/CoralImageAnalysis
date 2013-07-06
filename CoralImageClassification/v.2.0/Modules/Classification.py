@@ -26,6 +26,22 @@ class Parsers:
             if l[-1] != '-':
                 classification[l[0]] = l[-1]
         return classification
+    
+    def zawadaClassifications(self):
+        '''The pre-existing classifications from Dave's data'''
+        self.classifications = {
+            '0':'Indeterminate', 
+            '1':'Seagrasses', 
+            '2':'Hardbottom', 
+            '3':'Senile coral reef', 
+            '4':'Coral rubble', 
+            '5':'Carbonate sand', 
+            '6':'Live reef', 
+            '1 a':'Thalassia', 
+            '1 b':'Syringodium', 
+            '1 c':'Mixed'
+        }
+        return self.classifications
 
     def zawada(self):
         '''Dave Z's complex format'''
@@ -74,5 +90,4 @@ class Parsers:
                     sys.stderr.write("Error while parsing " + line + " for assignment")
 
         return classification
-
 

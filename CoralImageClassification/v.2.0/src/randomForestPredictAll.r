@@ -13,6 +13,7 @@ data <- read.delim(classified)
 data <- data[,1:(ncol(data)-1)]
 data <- data[complete.cases(data),]
 # remove any cases where we don't have classification data
+data <- subset(data, data[,2]!='')
 data <- subset(data, data[,2]!=0)
 data[,2]<-factor(data[,2])
 

@@ -2,11 +2,15 @@
 
 This takes the directory with all the files (or subdirectories straight from ATRIS) and the file that has Dave's format for the classifications. We output a tab separated matrix
 
-python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt  > WLH1.output.txt
+python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt  -o WLH1.output.txt
 
 Note that we also do this for all the images, and we will use these later in the analysis
 
-python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a > WLH1.allimages.txt
+python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.allimages.txt
+
+
+We can also do this for all images at once:
+python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.txt -a
 
 2. We import that data into R and use the randomForest to classify the images. At this point, we can also plot the prediction of these images.
 

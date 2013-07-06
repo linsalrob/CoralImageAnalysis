@@ -66,9 +66,12 @@ class Features:
         self.descarray = None
         self.lp = None
         self.he = None
+        self.keypointsizes=[]
+        self.orbdetector = None
+        self.keypoints = None
 
-    def detect_kp(self, img):
-        '''Detect the keypoints in the image'''
+    def detect_kp_surf(self, img):
+        '''Detect the keypoints in the image by SURF'''
 
         if (len(img.shape) != 2):
             sys.stderr.write("The image passed to SURFs is not a 2D image. Please refactor")
@@ -85,6 +88,39 @@ class Features:
         self.keypoints, self.descarray = s.detect(grey, None, useProvidedKeypoints = False)
         self.lp = round(keypoints.class_id)
         self.he = keypoints.response
+
+    def detect_kp_ORB(self, img):
+        ''' detect the keypoints by ORB algorithm''' 
+        if (len(img.shape) != 2):
+            sys.stderr.write("The image passed to SURFs is not a 2D image. Please refactor")
+            sys.exit(-1)
+        
+        self.orbdetector = cv2.FeatureDetector_create('ORB')
+        # change the number of features detected: self.orbdetector.setInt('nFeatures', 100)
+        self.keypointsizes=[]
+        self.keypoints = self.orbdetector.detect(img, None)
+        for k in self.keypoints:
+            self.keypointsizes.append(k.size)
+        self.keypointsizes = numpy.array(self.keypointsizes)
+
+    def numberKeyPoints(self):
+        '''Get the number of keypoints'''
+        return len(self.keypointsizes)
+
+    def medianKeyPointSize(self):
+        '''Get the median size of the keypoints'''
+        return numpy.median(self.keypointsizes)
+
+    def meanKeyPointSize(self):
+        '''Get the mean size of the key points'''
+        return numpy.mean(self.keypointsizes)
+
+    def numKeyPoints(self, minSize=50):
+        '''Get the number of key points larger than a give size (default: 50)'''
+        return sum(self.keypointsizes > minSize)
+
+
+
 
     def laplacian(self, img):
         if self.img != img:
