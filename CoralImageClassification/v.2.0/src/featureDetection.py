@@ -56,9 +56,6 @@ for imgfile in images:
             images.append(os.path.join(imgfile, f))
         continue
 
-    if not args.all and imgfile not in classification:
-        continue
-
     # silently skip the bin files that have the gps data
     if imgfile.endswith('bin'):
         continue

@@ -14,7 +14,8 @@ python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawa
 
 2. We import that data into R and use the randomForest to classify the images. At this point, we can also plot the prediction of these images.
 
-Rscript ../src/randomForest.r WLH1.output.txt
+# old way: Rscript ../src/randomForest.r WLH1.output.txt
+# new way: Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
 
 This creates a variable importance plot in the folder called png, and also creates the output file called 'WLH1.output.txt.probabilities.txt'. This latter file has the predictions of those images.
 
