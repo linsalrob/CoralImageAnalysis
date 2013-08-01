@@ -12,10 +12,21 @@ python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.al
 We can also do this for all images at once:
 python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.txt -a
 
+python ../src/featureDetection.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.txt
+
+
+
+Join the two data sets into a single text file:
+perl ../src/join.pl ELH2.features.txt ELH2.all.txt > ELH2.all.features.txt
+
+
+
 2. We import that data into R and use the randomForest to classify the images. At this point, we can also plot the prediction of these images.
 
 # old way: Rscript ../src/randomForest.r WLH1.output.txt
 # new way: Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
+
+Rscript  ../src/randomForestTrainPredictNoTrim.r ELH2.all.features.txt
 
 This creates a variable importance plot in the folder called png, and also creates the output file called 'WLH1.output.txt.probabilities.txt'. This latter file has the predictions of those images.
 
@@ -24,6 +35,60 @@ This creates a variable importance plot in the folder called png, and also creat
 python ../src/plot_predictions.py -f WLH1.output.txt.probabilities.txt -o WLH1.png
 
 
-4: TODO
 
-I need to write the Rscript to take the randomForest and predict the outcome for all images.
+
+=====
+
+We have two data sets: *.all.txt has the first data sets, but then I decided we needed to include some key point analysis so I made *.features.txt. Note that these do not have the same number of rows in them since there were some set of images (presumably sand) that do not have any keypoints!
+
+We have 131 different measures.
+
+
+We combine those into a single data file, 
+
+perl ../src/concatenate.pl *all.features.txt > all.all.txt
+mkdir all_features
+mv *all.features.txt all_features/
+
+
+and then use  perl to remove any unknowns or empty values
+for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$i.all.features.txt $i.data.txt; done
+
+# now calculate all the random forests. Note that we save the random forest in the rf/ directory so we can use it for predictions later.
+
+for i in ELH1  LHM5  WLH1  WLH2; do Rscript ../src/randomForestTrainPredictNoTrim.r $i.data.txt > rf_output/$i.rf.out.txt; done
+
+
+
+# cross test the output of each of the random forests with each of the data sets.
+Rscript ../src/crossTest.r
+
+## ###############################################################################################33
+
+Calculate a single random forest for all the data:
+
+concatenate the files:
+perl ../src/concatenate.pl *.data.txt > all.data.txt
+
+run the random forests:
+Rscript ../src/randomForestTrainPredictNoTrim.r all.data.txt > rf_output/all.rf.out
+
+Cross test all the outputs:
+Rscript ../src/crossTest.r
+
+and compile a table of those outputs
+
+
+
+Print out all column headers:
+perl -ne '@a=split /\t/; map {$_ =~ s/(\d+)$//; $c=$1; push @{$d{$_}}, $c} @a; END {map {print "$_\t", join(", ", @{$d{$_}}), "\n"} keys %d} exit' ELH1.all.features.txt
+
+
+
+***********************************************
+
+
+
+
+
+
