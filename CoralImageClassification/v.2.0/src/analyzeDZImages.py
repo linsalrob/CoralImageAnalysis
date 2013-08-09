@@ -26,6 +26,7 @@ parser.add_argument('-t', '--tab', help='Classification is tab separated text (d
 parser.add_argument('-a', '--all', help='Process all files (otherwise only those in the classification file are processed). If no file is given, this is assumed', action='store_true')
 parser.add_argument('-o', '--output', help='The output file. If this file exists, images in the file will be skipped and the file will be appended', required=True)
 parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
+parser.add_argument('-u', '--features', help='Include feature detection. Requires most modern openCV', action='store_true')
 args = parser.parse_args()
 
 if not args.file:
@@ -45,6 +46,9 @@ lap = Laplacian()
 # Edges has CAnny
 edge = Edges()
 
+# features for the  .. features 
+#
+feats=Features()
 
 # initiate and run the classification if needed
 classification = {}
@@ -149,11 +153,16 @@ for imgfile in images:
         fout.write( ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))) + "\t" )
     fout.write( str(fft.energy(gray)) + "\t" + str(fft.energy(ngray)) + "\t")
 
-    feats.detect_kp_ORB(ngray)
-    fout.write( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t")
+    if args.features:
+        feats.detect_kp_ORB(ngray)
+        fout.write( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t")
 
-    for i in range(15):
-        fout.write( str(feats.numKeyPoints(i*10)) + "\t")
+        for i in range(15):
+            fout.write( str(feats.numKeyPoints(i*10)) + "\t")
+    else:
+        fout.write("0\t0\t0\t");
+        for i in range(15):
+            fout.write("0\t")
     
     for i in range(15):
         k=2*i+1

@@ -68,7 +68,9 @@ class Parsers:
             if inassignment:
                 parts=line.split('::')
                 path=parts[0].split('\\')
-                filename=os.path.join(path[0], path[1])
+                filename = path[0]
+                if len(path) > 1:
+                    filename=os.path.join(path[0], path[1])
                 m=re.search('d.*\)\s*(\d+)\s*(\S*);', parts[1])
                 if m == None:
                     continue

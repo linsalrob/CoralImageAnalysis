@@ -87,8 +87,11 @@ perl -ne '@a=split /\t/; map {$_ =~ s/(\d+)$//; $c=$1; push @{$d{$_}}, $c} @a; E
 
 ***********************************************
 
+Hopefully this will do all the cross validation and subsampling in one:
+
+for i in ELH1 ELH2 LHM5 WLH1 WLH2; do Rscript ../src/randomForestTrainPredictSubsample.r all_not_$i.data.txt > rf_output/all_not_$i.data.rf.out; Rscript ../src/randomForestTrainPredictSubsample.r $i.data.txt > rf_output/$i.data.rf.out; done; Rscript ../src/crossTest.r; mv -f *_rf.probabilities.txt cross_test_probabilities; perl ../src/cross_validate.pl  > cross_validate.txt
 
 
-
+Subsamples:
 
 
