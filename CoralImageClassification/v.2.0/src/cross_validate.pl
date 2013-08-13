@@ -3,7 +3,12 @@
 
 use strict;
 
-open(IN, "all.data.txt") || die "Can't open all.data.txt";
+my $allf = shift || die "All data file that has categories in column 1";
+my $dir = shift || die "directory with crossTest probability outputs";
+my $outf = shift || die "file to write to";
+open(OUT, ">$outf") || die "can't write to $outf";
+
+open(IN, $allf) || die "Can't open $allf";
 my %known;
 while (<IN>) {
 	chomp;
@@ -15,10 +20,10 @@ while (<IN>) {
 close IN;
 
 
-opendir(DIR, "cross_test_probabilities") || die "Can't open cross_test_probabilities";
+opendir(DIR, $dir) || die "Can't open $dir";
 my %allrfs; my $crossvalidation;
 foreach my $f (sort {$a cmp $b} grep {$_ !~ /^\./} readdir(DIR)) {
-	open(IN, "cross_test_probabilities/$f") || die "Can't open $f";
+	open(IN, "$dir/$f") || die "Can't open $dir/$f";
 	my $header;
 	my $count=0;
 	my $correct=0;
@@ -49,38 +54,38 @@ foreach my $f (sort {$a cmp $b} grep {$_ !~ /^\./} readdir(DIR)) {
 	unless ($count) {die "There were no knowns in $f"}
 
 	my @t=sort {$a cmp $b} keys %alltypes;
-	$f =~ /(\w+)_data.(\w+)_rf/;
+	$f =~ /([\w\.]+)_data.([\w\.]+)_rf/;
 	my ($ds, $rfs)=($1, $2);
-	print "\n\nUsing the random forest trained on $rfs and data set $ds. The number of images classified was: $count. The number correctly assigned was: $correct (";
-	printf("%0.2f", ($correct/$count)*100);
-	print " % correct)\n";
+	print OUT "\n\nUsing the random forest trained on $rfs and data set $ds. The number of images classified was: $count. The number correctly assigned was: $correct (";
+	print OUT sprintf("%0.2f", ($correct/$count)*100);
+	print OUT " % correct)\n";
 
 	$crossvalidation->{$ds}->{$rfs}=sprintf("%0.2f", ($correct/$count)*100);
 	$allrfs{$rfs}=1;
 
-	print join("\t", "", @t), "\n";
+	print OUT join("\t", "", @t), "\n";
 	foreach my $i (@t) {
-		print $i;
+		print OUT $i;
 		map {
-		if ($expect->{$i}->{$_}) {print "\t", $expect->{$i}->{$_}}
-		else {print "\t0"}
+		if ($expect->{$i}->{$_}) {print OUT "\t", $expect->{$i}->{$_}}
+		else {print OUT "\t0"}
 		} @t;
-		print "\n";
+		print OUT "\n";
 	}
 }
 
 
-print "=" x 30;
-print "\n\n";
+print OUT "=" x 30;
+print OUT "\n\n";
 my @arfs=sort {$a cmp $b} keys %allrfs;
-print "\t\t\tRANDOM FORESTS\n";
-print join("\t", "", @arfs), "\n";
+print OUT "\t\t\tRANDOM FORESTS\n";
+print OUT join("\t", "", @arfs), "\n";
 foreach my $a (@arfs) {
-	print $a;
+	print OUT $a;
 	map {
-		if ($crossvalidation->{$a}->{$_}) {print "\t", $crossvalidation->{$a}->{$_}}
-		else {print "\t0"}
+		if ($crossvalidation->{$a}->{$_}) {print OUT "\t", $crossvalidation->{$a}->{$_}}
+		else {print OUT "\t0"}
 	} @arfs;
-	print "\n";
+	print OUT "\n";
 }
 

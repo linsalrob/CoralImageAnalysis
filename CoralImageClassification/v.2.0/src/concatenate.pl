@@ -19,7 +19,7 @@ foreach my $f (@ARGV) {
 			$thisheader=1;
 			next;
 		}
-		print $f, "/", $_;
+		print;
 	}
 	close IN;
 

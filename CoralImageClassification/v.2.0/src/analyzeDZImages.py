@@ -136,7 +136,7 @@ for imgfile in images:
     if imgfile in classification:
         fout.write( classification[imgfile] + "\t")
     else:
-        fout.write( "\t" )
+        fout.write( "unknown\t" )
 
 
     img = ImageIO.cv2read(os.path.join(args.directory, imgfile))

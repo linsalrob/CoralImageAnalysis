@@ -35,8 +35,8 @@ varImpPlot(rf, type=1, pch=19, col=1, cex=.5, main="")
 varImpPlot(rf, type=2, pch=19, col=1, cex=.5, main="")
 dev.off()
 
-
-p <- predict(rf, data, 'prob')
-namedp <- data.frame(data[1], p)
-outtext = paste(datafile, ".probabilities.txt", sep="")
+dataNoN <- na.omit(data)
+p <- predict(rf, dataNoN, 'prob')
+namedp <- data.frame(dataNoN[1], p)
+outtext = paste("probabilities/", datafile, ".probabilities.txt", sep="")
 write.table(namedp, file=outtext, sep='\t')
