@@ -94,4 +94,14 @@ for i in ELH1 ELH2 LHM5 WLH1 WLH2; do Rscript ../src/randomForestTrainPredictSub
 
 Subsamples:
 
+# plotting data against itself
+for i in EKC ELH1 ELH2 LHM5 NKH WLH1 WLH2; do python
+../src/plot_predictions.py -f
+rf.probabilities/$i.data.txt_data.$i.data.txt_rf.probabilities.txt -o
+self_trained_probabilities/$i.png -u; done
 
+# plotting cross trained probabilitie: images trained on all other data sets
+for i in EKC ELH1 ELH2 LHM5 NKH WLH1 WLH2; do python
+../src/plot_predictions.py -f
+rf.probabilities/$i.data.txt_data.all_not_$i.txt.rf.bin_rf.probabilities.txt
+-o cross_trained_probabilities/$i.png -u; done
