@@ -1,4 +1,5 @@
 import sys
+#sys.path.append('/Users/Tosti/Desktop/CS_Lab_Spring_14/CoralImageAnalysis/CoralImageClassification/v.2.0/Modules/')
 sys.path.append('../Modules/')
 import os
 import ImageIO
@@ -35,26 +36,31 @@ if not args.file:
 # define our analysis methods
 
 # The stats class has min(), median(), mean(), max()
+"""From Analysis.py"""
 stats = Stats()
 
 # The FFT class has energy()
+"""From Analysis.py"""
 fft = FFT()
 
 # the Laplacian class calculates the laplacian
-lap = Laplacian()
+"""From Analysis.py"""
+lap = Laplacian() 
 
-# Edges has CAnny
+# Edges has CAnny #Canny part of OpenCV module
+"""From Analysis.py"""
 edge = Edges()
 
 # features for the  .. features 
-#
-feats=Features()
+"""From Analysis.py"""
+feats=Features() 
 
 # initiate and run the classification if needed
 classification = {}
 if args.file:
     for f in args.file:
         sys.stderr.write("Parsing the classifications in " + f + "\n")
+        """From Classification.py"""
         classifier = Classification.Parsers(f)
         newclass={}
         if args.tab:
@@ -68,7 +74,7 @@ if args.file:
 # set up the output file
 
 fout=None;
-seen={}
+seen={}     
 if (os.path.exists(args.output)):
     # if the output exists we need to read it and collect all the files we have seen
     fout=open(args.output, 'r')
@@ -105,12 +111,10 @@ else:
 
     fout.write("\n")
 
-
 images = os.listdir(args.directory)
 for imgfile in images:
 
-    if imgfile in seen:
-        continue
+    if imgfile in seen: continue
 
     if os.path.isdir(os.path.join(args.directory, imgfile)):
         temp = os.listdir(os.path.join(args.directory, imgfile))
@@ -137,7 +141,6 @@ for imgfile in images:
         fout.write( classification[imgfile] + "\t")
     else:
         fout.write( "unknown\t" )
-
 
     img = ImageIO.cv2read(os.path.join(args.directory, imgfile))
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)

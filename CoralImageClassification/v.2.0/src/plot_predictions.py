@@ -12,7 +12,6 @@ parser = argparse.ArgumentParser(description='Plot the predictions made by the R
 parser.add_argument('-f', '--file', help='tab separated predictions from the Random Forest', required=True)
 parser.add_argument('-o', '--out', help='output file name to draw the picture to', required=True)
 parser.add_argument('-w', '--window', help='Window size to average the numbers over (try 1/100 * # images). If not provided the numbers are not averaged.')
-parser.add_argument('-u', '--hundred', help='Use 1/100 * number of images as the window size.', action='store_true')
 args = parser.parse_args()
 
 
@@ -37,10 +36,6 @@ for line in fin:
     data.append(numpy.array(d[2:]).astype(float))
 
 dtc=None
-
-if args.hundred:
-    args.window = len(data)/100
-
 if args.window:
     dt=numpy.transpose(data)
     for i in range(dt.shape[0]):
@@ -50,17 +45,10 @@ if args.window:
 else:
     dtc=data
 
-colormap = plt.cm.gist_ncar
-num_plots=10
-plt.gca().set_color_cycle([colormap(i) for i in numpy.linspace(0, 0.9, num_plots)])
-
-
-#
 fontP = FontProperties()
 fontP.set_size('small')
 fig = plt.figure()
 ax = plt.subplot(111)
-
 ax.plot(dtc)
 #ax.set_xticklabels(xlabels, rotation=45, fontproperties=fontP)
 #ax.set_xlabel('Image number in the series')
