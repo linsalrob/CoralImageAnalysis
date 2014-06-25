@@ -140,7 +140,7 @@ class TestContours(unittest.TestCase):
         equalityBool = (conImage == tmpImc).all()
         self.assertTrue(equalityBool)
 
-    def test_totalPerimeterLength(self):
+    def test_totalPerimeterLength_vs_raw_calculation(self):
         length = self.contours.totalPerimeterLength()
         thresh1 = 1
         thresh2 = 255
@@ -152,7 +152,7 @@ class TestContours(unittest.TestCase):
             tmpLen += cv2.arcLength(c,cv2.isContourConvex(c))
         self.assertEqual(length,tmpLen)
     
-    def test_findLines(self):
+    def test_findLines_vs_raw_calculation(self):
         lines = self.contours.findLines()
         image = self.img
         image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -165,9 +165,9 @@ class TestContours(unittest.TestCase):
         equalityBool = (lines == tmpLines).all()
         self.assertTrue(equalityBool)
 
-    def test_lineLengths(self):
-        
+    def test_lineLengths_vs_raw_calculation(self):
         length = self.contours.linelengths()
+        
         image = self.img
         image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
         thresh1 = 1
@@ -180,34 +180,110 @@ class TestContours(unittest.TestCase):
         lengtharr=[]
         for xy in tmpLines[0]:
             xyv = xy.reshape(2,2)
-            length = numpy.linalg.norm(xyv[0]-xyv[1])
-            lengtharr.append(length)
+            inLength = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(inLength)
 
         tmpLength = numpy.array(lengtharr)
-        print ""
-        print type(length)
-        print type(tmpLength)
-        print length
-        print ""
-        print ""
-        print ""
-        print tmpLength
+        equalityBool = (length == tmpLength).all()
+        self.assertTrue(equalityBool)
+    
+    def test_medianLineLength_vs_raw_calculation(self):
+        length = self.contours.linelengths()
         
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        thresh1 = 1
+        thresh2 = 255
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
         
+        tmpLength = numpy.array([])
+        lengtharr=[]
+        for xy in tmpLines[0]:
+            xyv = xy.reshape(2,2)
+            inLength = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(inLength)
+
+        tmpLength = numpy.array(lengtharr)
         
-        #self.skipTest("Not implemented yet.")
+        median = self.contours.medianLineLength()
+        tmpMedian = numpy.median(tmpLength)
+        self.assertEqual(median,tmpMedian)
     
-    def test_medianLineLength(self):
-        self.skipTest("Not implemented yet.")
     
-    def test_meanLineLength(self):
-        self.skipTest("Not implemented yet.")
+    def test_meanLineLength_vs_raw_calculation(self):
+        length = self.contours.linelengths()
+        
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        thresh1 = 1
+        thresh2 = 255
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
+        
+        tmpLength = numpy.array([])
+        lengtharr=[]
+        for xy in tmpLines[0]:
+            xyv = xy.reshape(2,2)
+            inLength = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(inLength)
+        tmpLength = numpy.array(lengtharr)
+        
+        mean = self.contours.meanLineLength()
+        tmpMean = numpy.mean(tmpLength)
+        self.assertEqual(mean,tmpMean)
+        
     
-    def test_modeLineLength(self):
-        self.skipTest("Not implemented yet.")
+    def test_modeLineLength_vs_raw_calculation(self):
+        length = self.contours.linelengths()
+        
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        thresh1 = 1
+        thresh2 = 255
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
+        
+        tmpLength = numpy.array([])
+        lengtharr=[]
+        for xy in tmpLines[0]:
+            xyv = xy.reshape(2,2)
+            inLength = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(inLength)
+        tmpLength = numpy.array(lengtharr)
+        
+        mode = self.contours.modeLineLength()
+        ints = numpy.rint(tmpLength).astype(int)
+        counts = numpy.bincount(ints)
+        tmpMode = numpy.argmax(counts)
+        self.assertEqual(mode,tmpMode)
     
-    def test_maxLineLength(self):
-        self.skipTest("Not implemented yet.")
+    def test_maxLineLength_vs_raw_calculation(self):
+        length = self.contours.linelengths()
+        
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        thresh1 = 1
+        thresh2 = 255
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
+        
+        tmpLength = numpy.array([])
+        lengtharr=[]
+        for xy in tmpLines[0]:
+            xyv = xy.reshape(2,2)
+            inLength = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(inLength)
+        tmpLength = numpy.array(lengtharr)
+        
+        origMax = self.contours.maxLineLength()
+        tmpMax = numpy.max(tmpLength)
+        
+        self.assertEqual(origMax,tmpMax)
     
 if __name__=="__main__":
     unittest.main()
