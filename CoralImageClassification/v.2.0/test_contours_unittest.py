@@ -1,6 +1,6 @@
 #Test file for Contours.py class
 import sys
-import numpy as np
+import numpy
 import cv2
 import unittest
 
@@ -33,9 +33,9 @@ class TestContours(unittest.TestCase):
         #iterates over the two lists, which are composed of ndarrays.
         #This could probably be more efficient, I will have to do more research.
         for i in xrange(len(self.contours.contours)):
-            boolList.append(np.all(self.contours.contours[i] == tmpContours[i]))
+            boolList.append(numpy.all(self.contours.contours[i] == tmpContours[i]))
         
-        contourBool = np.all(boolList)
+        contourBool = numpy.all(boolList)
         hierarchyBool = (self.contours.hierarchy == tmpHierarchy).all()
         self.assertTrue(contourBool and hierarchyBool)
         
@@ -124,7 +124,7 @@ class TestContours(unittest.TestCase):
         tmpMaxSize = 0
         
         tmpThickness = 1
-        tmpImc = np.copy(self.img)
+        tmpImc = numpy.copy(self.img)
         for i in range(len(tmpConts)):
             #c1 = np.random.randint(255)
             #c2 = np.random.randint(255)
@@ -154,25 +154,48 @@ class TestContours(unittest.TestCase):
     
     def test_findLines(self):
         lines = self.contours.findLines()
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
         thresh1 = 1
         thresh2 = 255
-        tmpImg = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        tmpCan = cv2.Canny(tmpImg, thresh1, thresh2)
-        tmpConts, tmpHierarchy = cv2.findContours(tmpCan, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        tmpLines = cv2.HoughLinesP(tmpCan,1,np.pi/180,40,5)
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
         
-        
-        
-        print ""
-        print lines
-        print tmpLines
-        self.assertEqual(self.contours.lines,tmpLines)
-        #WOW RSYNC IS MAGIC!
-        #Wow now it's magic!
-        #now it's magic?
-        
+        equalityBool = (lines == tmpLines).all()
+        self.assertTrue(equalityBool)
+
     def test_lineLengths(self):
-        self.skipTest("Not implemented yet.")
+        
+        length = self.contours.linelengths()
+        image = self.img
+        image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+        thresh1 = 1
+        thresh2 = 255
+        tmpCanny = cv2.Canny(image,thresh1,thresh2)
+        tmpContours, tmpHierarchy = cv2.findContours(tmpCanny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        tmpLines = cv2.HoughLinesP(tmpCanny, 1, numpy.pi/180, 40, minLineLength=5)
+        
+        tmpLength = numpy.array([])
+        lengtharr=[]
+        for xy in tmpLines[0]:
+            xyv = xy.reshape(2,2)
+            length = numpy.linalg.norm(xyv[0]-xyv[1])
+            lengtharr.append(length)
+
+        tmpLength = numpy.array(lengtharr)
+        print ""
+        print type(length)
+        print type(tmpLength)
+        print length
+        print ""
+        print ""
+        print ""
+        print tmpLength
+        
+        
+        
+        #self.skipTest("Not implemented yet.")
     
     def test_medianLineLength(self):
         self.skipTest("Not implemented yet.")
