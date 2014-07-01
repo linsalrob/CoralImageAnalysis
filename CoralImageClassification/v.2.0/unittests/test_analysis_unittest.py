@@ -75,8 +75,6 @@ class TestAnalysis(unittest.TestCase):
         self.skipTest("Not implemented yet.")
         #I am not sure if open cv provides equivalent functionality
         #for now I think I should recalculate the value using my own function
-        #pass
-        pass
         
         
     """Features class tests"""    

@@ -12,8 +12,8 @@ A test program to make sure that the Normalization methods work.
 This normalizes the images, and displays them.
 '''
 
-#test = 'test.jpg'
-test = "/home/redwards/Dropbox/ComputerVision/TestCode/test.png"
+test = 'test.jpg'
+#test = "/home/redwards/Dropbox/ComputerVision/TestCode/test.png"
 im = ImageIO.cv2read(test)
 print im.shape
 

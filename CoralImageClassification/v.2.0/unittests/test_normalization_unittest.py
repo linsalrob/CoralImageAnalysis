@@ -17,9 +17,6 @@ class TestClassification(unittest.TestCase):
         
     def test_tyler(self):
         tylerImg = Normalization.Tyler(self.img)
-        #print ""
-        #print "done with tyler."
-        #print ""
         img = self.img
         im2 = numpy.zeros_like(img)
         for j in range(img.shape[0]):
