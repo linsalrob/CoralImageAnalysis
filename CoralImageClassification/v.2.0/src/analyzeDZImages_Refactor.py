@@ -52,16 +52,68 @@ def moduleInitializer():
     modules.append(feats)
     return modules
 
+def classificationHandler(args):
+    classification = {}
+    if args.file:
+        for f in args.file:
+            sys.stderr.write("Parsing the classifications in " + f + "\n")
+            """From Classification.py"""
+            classifier = Classification.Parsers(f)
+            newclass={}
+            if args.tab:
+                newclass = classifier.tab()
+            else:
+                newclass = classifier.zawada()
+            for c in newclass:
+                classification[c] = newclass[c]               
+    return classification
+
+def outputHandler(fout, seen,args):    
+    if (os.path.exists(args.output)):
+        # if the output exists we need to read it and collect all the files we have seen
+        fout=open(args.output, 'r')
+        for line in fout:
+            pieces = line.split('\t')
+            seen[pieces[0]]=1
+        fout.close()
+        fout=open(args.output, 'a')
+    else:
+        # if we have created a new output file we need to print the header. 
+        # If we are appending to an existing output file we do not need to create the header
+        fout=open(args.output, 'w')
+        fout.write( ('\t'.join(map(str, ["Image File", "Classification", 
+               "grayMin", "grayMax", "grayMedian", "grayMean", 
+               "gnMin", "gnMax", "gnMedian", "gnMean", 
+               "blueMin", "blueMax", "blueMedian", "blueMean", 
+               "greenMin", "greenMax", "greenMedian", "greenMean", 
+               "redMin", "redMax", "redMedian", "redMean", 
+               "FFT", "nFFT", "NumKeyPoints", "MedianKPSize", "MeanKPSize"]))) +"\t")
+    
+        for i in range(15):
+            fout.write( "KPsOver" + str(10*i) + "\t")
+
+        for i in range(15):
+            fout.write( "Lapl" + str(2*i+1) + "\t")
+
+        for i in range(25):
+            fout.write( "Can1." + str(10*i) + "\t")
+
+        for i in range(5):
+            t=50*i
+            fout.write( "Contours" + str(t) + "\tClosedCont" + str(t) + "\tOpenCont" + str(t) + "\tContArea" + str(t) + "\tLargestCont" + str(t) + "\tPerimeter" + str(t) + "\t")
+            fout.write( "MaxLL" + str(t) + "\tMeanLL" + str(t) + "\tMedianLL" + str(t) + "\tModeLL" + str(t) + "\t")
+
+        fout.write("\n")
+    return (fout,seen)
+    
 def tmpMain():
     print "started!"
     args = argProcessor()
     if not args.file:
         args.all = True
-    stats = None
-    fft = None
-    lap = None
-    edge = None
-    feats = None
+    
+    
+    stats, fft, lap, edge, feats = (None,)*5
     modules = moduleInitializer()
     modules.reverse()
     stats = modules.pop()
@@ -69,7 +121,12 @@ def tmpMain():
     lap = modules.pop()
     edge = modules.pop()
     feats = modules.pop()
+    classification = classificationHandler(args)
+    fout=None;
+    seen={}
+    fout, seen = outputHandler(fout,seen,args)
+    print fout
+    print seen
     
-        
 if __name__ == '__main__':
 	tmpMain()

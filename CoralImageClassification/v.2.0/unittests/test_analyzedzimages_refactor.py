@@ -55,7 +55,19 @@ class TestAnalysis(unittest.TestCase):
         self.assertFalse(EqualityBool)
     
     
+    def test_classificationHandler(self):
+        self.skipTest("Not implemented yet.")
+        """!!!Note:
+        I can't test this yet, I think I need real arguments / files to produce classification.
+        It just produces an empty dictionary right now.
+        """
+        
+        #tmpArgs = argparse.Namespace(all=False, directory='../test/', features=False, file=None, output='../test/', tab=None, verbose=False)
+        #classification = adz.classificationHandler(tmpArgs)
     
+    def test_outputHandler(self):
+        self.skipTest("Not implemented yet.")
+        
 
 if __name__ == '__main__':
 	unittest.main()
