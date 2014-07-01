@@ -21,24 +21,39 @@ class TestAnalysis(unittest.TestCase):
         
     def test_argProcessor(self):
         self.skipTest("Not implemented yet.")
-        pass
         
-    def test_moduleInitializer(self):
+    def test_moduleInitializer_vs_raw_equivalent(self):
         modules = adz.moduleInitializer()
         tmpModules = [
             Stats(),
             FFT(),
             Laplacian(),
             Edges(),
-            Features()]
+            Features()]  
             
         EqualityBool = True
         for i in xrange(len(modules)):
-            if(type(modules.pop) != type(tmpModules.pop)):
+            mod1 = modules[i].__class__.__name__
+            mod2 = tmpModules[i].__class__.__name__
+            if mod1 != mod2:
                 EqualityBool = False
                 break
         self.assertTrue(EqualityBool)
-        #self.assertEqual(tmpModules,modules)
+    
+    def test_moduleInitializer_vs_self_reverse(self):
+        modules = adz.moduleInitializer()
+        tmpModules = adz.moduleInitializer()
+        tmpModules.reverse()
+            
+        EqualityBool = True
+        for i in xrange(len(modules)):
+            mod1 = modules[i].__class__.__name__
+            mod2 = tmpModules[i].__class__.__name__
+            if mod1 != mod2:
+                EqualityBool = False
+                break
+        self.assertFalse(EqualityBool)
+    
     
     
 

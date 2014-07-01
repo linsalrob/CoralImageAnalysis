@@ -70,7 +70,6 @@ def tmpMain():
     edge = modules.pop()
     feats = modules.pop()
     
-    
         
-#if __name__ == '__main__':
-	#tmpMain()
+if __name__ == '__main__':
+	tmpMain()
