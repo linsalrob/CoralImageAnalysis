@@ -14,7 +14,7 @@ import cv2
 import Classification
 import Contours
 
-class TestAnalysis(unittest.TestCase):
+class TestAnalyze_Refactor(unittest.TestCase):
     
     def setUp(self):  
         pass

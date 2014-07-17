@@ -68,7 +68,7 @@ def classificationHandler(args):
                 classification[c] = newclass[c]               
     return classification
 
-def outputHandler(fout, seen,args):    
+def outputHandler(fout, seen, args):    
     if (os.path.exists(args.output)):
         # if the output exists we need to read it and collect all the files we have seen
         fout=open(args.output, 'r')
@@ -106,12 +106,96 @@ def outputHandler(fout, seen,args):
         fout.write("\n")
     return (fout,seen)
     
-def tmpMain():
+def imageWriter(images,seen,args,fout,classification,stats,fft,lap,edge):
+    for imgfile in images:
+
+        if imgfile in seen: continue
+
+        if os.path.isdir(os.path.join(args.directory, imgfile)):
+            temp = os.listdir(os.path.join(args.directory, imgfile))
+            for f in temp:
+                images.append(os.path.join(imgfile, f))
+            continue
+
+        if not args.all and imgfile not in classification:
+            continue
+
+        # silently skip the bin files that have the gps data
+        if imgfile.endswith('bin'):
+            continue
+        # alert to other files that were skipped
+        if not (imgfile.endswith('png') | imgfile.endswith('jpg')):
+            sys.stderr.write("Skipped file: " + imgfile + "\n")
+            continue
+
+        if args.verbose:
+            sys.stderr.write("Parsing " + imgfile + "\n")
+
+        fout.write( imgfile + "\t" )
+        if imgfile in classification:
+            fout.write( classification[imgfile] + "\t")
+        else:
+            fout.write( "unknown\t" )
+
+        img = ImageIO.cv2read(os.path.join(args.directory, imgfile))
+        gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        fout.write( ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))) + "\t" )
+
+        ngray = Normalization.equalizeHistograms(gray)
+        # apply a gaussian blur to remove edge effects
+        ngray = cv2.GaussianBlur(ngray, (3,3), 0)
+        fout.write( ('\t'.join(map(str, [stats.min(ngray), stats.max(ngray), stats.median(ngray), stats.mean(ngray)]))) + "\t")
+
+        for i in range(3):
+            imp = img[:,:,i]
+            fout.write( ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))) + "\t" )
+        fout.write( str(fft.energy(gray)) + "\t" + str(fft.energy(ngray)) + "\t")
+
+        if args.features:
+            feats.detect_kp_ORB(ngray)
+            fout.write( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t")
+
+            for i in range(15):
+                fout.write( str(feats.numKeyPoints(i*10)) + "\t")
+        else:
+            fout.write("0\t0\t0\t");
+            for i in range(15):
+                fout.write("0\t")
+    
+        for i in range(15):
+            k=2*i+1
+            fout.write( str(lap.sum(ngray, k)) + "\t")
+
+        for i in range(25):
+            t2 = 10*i
+            fout.write( str(edge.sumCanny(ngray, 1, t2)) + "\t")
+        #edge.sumCanny(gray)
+
+        # Contour detection
+        ctr = Contours.contours(ngray)
+        for i in range(5):
+            threshold=50*i
+            ctr.withCanny(1, threshold)
+            if ctr.numberOfContours() == 0:
+                fout.write( "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t" )
+            else:
+                try:
+                    fout.write( "\t".join(map(str, [ctr.numberOfContours(), ctr.numberOfClosedContours(),
+                                          ctr.numberOfOpenContours(), ctr.totalContourArea(), cv2.contourArea(ctr.largestContourByArea()),
+                                          ctr.totalPerimeterLength()])) + "\t")
+                    ctr.linelengths()
+                    fout.write( "\t".join(map(str, [ctr.maxLineLength(), ctr.meanLineLength(), ctr.medianLineLength(), ctr.modeLineLength()])) + "\t")
+                except Exception as e:
+                    sys.stderr.write("There was an error calculating the contours for " + imgfile +": " + e.message + "\n")
+                    fout.write( "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t" )
+
+        fout.write("\n")    
+    
+def testMain():
     print "started!"
     args = argProcessor()
     if not args.file:
         args.all = True
-    
     
     stats, fft, lap, edge, feats = (None,)*5
     modules = moduleInitializer()
@@ -127,6 +211,8 @@ def tmpMain():
     fout, seen = outputHandler(fout,seen,args)
     print fout
     print seen
+    images = os.listdir(args.directory)
+    imageWriter(images,seen,args,fout,classification,stats,fft,lap,edge)
     
 if __name__ == '__main__':
-	tmpMain()
+	testMain()
