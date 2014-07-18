@@ -31,14 +31,20 @@ def deleteLastRow(array):
     array = array[:len(array)-1:]
     return array
 
-def deleteNthCol(array,n):
-    """docstring for deleteNthColumn"""
-    pass
-    
 def deleteNthRow(array,n):
-    """docstring for deleteNthRow"""
-    pass
+    """Deletes the nth row, not 0 based. returns new array with row deleted."""
+    start=n-1
+    end=n
+    array=numpy.delete(array,xrange(start,end),0)
+    return array
 
+def deleteNthCol(array,n):
+    """Deletes the nth column, not 0 based. returns new array with column deleted."""
+    start=n-1
+    end=n
+    array=numpy.delete(array,xrange(start,end),1)
+    return array
+    
 def deleteRowSequence(array,start,end):
     """Deletes the entered sequence of indicides from the array.
     Note, input should not be 0 based, it begins at '1' for the 1st row.
@@ -67,19 +73,25 @@ def deleteColSequence(array,start,end):
     array=numpy.delete(array,xrange(start,end),1)
     return array
 
-def getFirstCol(array):
-    """Returns the first column of entered array."""
-    col = array[:,:1]
-    return col
-    
 def getFirstRow(array): 
     """Returns the first row of the entered array."""
     row = array[0,:]  
     return row
 
+def getFirstCol(array):
+    """Returns the first column of entered array."""
+    col = array[:,:1]
+    return col
+
 def getLastRow(array):
+    """Returns the last row of the entered array."""
     row = array[len(array)-1::]
     return row
+    
+def getLastCol(array):
+    """Returns the last column of the entered array."""
+    col = array[:,len(array)-1:]
+    return col
     
 if __name__ == '__main__':
     arr=numpy.array([
@@ -89,7 +101,7 @@ if __name__ == '__main__':
     ["d1","d2","d3","d4","d5"],
     ["e1","e2","e3","e4","e5"],
     ])
-    newArr=deleteColSequence(arr,2,)
+    newArr=getFirstCol(arr)
     print newArr
     print ""
     print arr
