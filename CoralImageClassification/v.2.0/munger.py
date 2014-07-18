@@ -2,11 +2,6 @@
 #Data munging helper for 2D ndarrays from numpy package.
 import numpy
 
-def testFunction(array):
-    length=len(array)
-    array = array[:length,1:]
-    return array
-
 def deleteFirstRow(array):
     """Deletes the first row of a 2D array. 
     It returns a copy of the new array"""
@@ -19,16 +14,16 @@ def deleteFirstCol(array):
     array = array[:,1:]  
     return array
 
-def deleteLastCol(array):
-    """Deletes the last column of a 2D array. 
-    It returns a copy of the new array"""
-    array = array[:,:-1]
-    return array
-
 def deleteLastRow(array):
     """Deletes the last row of a 2D array. 
     It returns a copy of the new array"""
     array = array[:len(array)-1:]
+    return array
+
+def deleteLastCol(array):
+    """Deletes the last column of a 2D array. 
+    It returns a copy of the new array"""
+    array = array[:,:-1]
     return array
 
 def deleteNthRow(array,n):
@@ -92,16 +87,17 @@ def getLastCol(array):
     """Returns the last column of the entered array."""
     col = array[:,len(array)-1:]
     return col
-    
-if __name__ == '__main__':
-    arr=numpy.array([
-    ["a1","a2","a3","a4","a5"],
-    ["b1","b2","b3","b4","b5"],
-    ["c1","c2","c3","c4","c5"],
-    ["d1","d2","d3","d4","d5"],
-    ["e1","e2","e3","e4","e5"],
-    ])
-    newArr=getFirstCol(arr)
-    print newArr
-    print ""
-    print arr
+
+#Simple testing setup    
+#if __name__ == '__main__':
+#    arr=numpy.array([
+#    ["a1","a2","a3","a4","a5"],
+#    ["b1","b2","b3","b4","b5"],
+#    ["c1","c2","c3","c4","c5"],
+#    ["d1","d2","d3","d4","d5"],
+#    ["e1","e2","e3","e4","e5"],
+#    ])
+#    newArr=getFirstRow(arr)
+#    print newArr
+#    print ""
+#    print arr
