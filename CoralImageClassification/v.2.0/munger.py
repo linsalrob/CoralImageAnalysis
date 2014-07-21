@@ -87,17 +87,55 @@ def getLastCol(array):
     """Returns the last column of the entered array."""
     col = array[:,len(array)-1:]
     return col
+    
+def getNthRow(array,n):
+    """Returns the nth row of the array. Is not 0 based, 1 is the first row."""
+    n-=1
+    row = array[n,:]  
+    return row
+    
+def getNthCol(array,n):
+    """Returns the nth column of the array. Is not 0 based, 1 is the first column."""
+    n-=1
+    col = array[:,[n]]  
+    return col
+
+def getRowSequence(array,start,end):
+    """Returns the row sequence of the array.
+    Copies rows inclusively from 'start' to 'end'
+    Is not 0 based, 1 is the first row."""
+    start-=1
+    rows = array[start:end:]  
+    return rows
+
+def getColSequence(array,start,end):
+    """Returns the column sequence of the array.
+    Copies columns inclusively from 'start' to 'end'
+    Is not 0 based, 1 is the first columns."""
+    #Some crude input tests here.
+    if start > end:         start = end
+    if start < 1:           start = 1
+    if start > len(array):  start = len(array)
+    if end < start:         end = start
+    if end < 1:             end = 1
+    if end > len(array):    end = len(array)
+
+    start-=1
+    #cols = array[:len(array[0]):]  
+    #cols = array[start:end:]
+    cols = array[:,xrange(start,end)]
+    return cols
 
 #Simple testing setup    
-#if __name__ == '__main__':
-#    arr=numpy.array([
-#    ["a1","a2","a3","a4","a5"],
-#    ["b1","b2","b3","b4","b5"],
-#    ["c1","c2","c3","c4","c5"],
-#    ["d1","d2","d3","d4","d5"],
-#    ["e1","e2","e3","e4","e5"],
-#    ])
-#    newArr=getFirstRow(arr)
-#    print newArr
-#    print ""
-#    print arr
+if __name__ == '__main__':
+    arr=numpy.array([
+    ["a1","a2","a3","a4","a5"],
+    ["b1","b2","b3","b4","b5"],
+    ["c1","c2","c3","c4","c5"],
+    ["d1","d2","d3","d4","d5"],
+    ["e1","e2","e3","e4","e5"],
+    ])
+    newArr=getNthCol(arr,5)
+    print newArr
+    print ""
+    print arr

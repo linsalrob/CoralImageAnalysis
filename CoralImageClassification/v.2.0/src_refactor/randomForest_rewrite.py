@@ -5,6 +5,7 @@ import sys
 import csv
 import numpy
 import time
+import munger
 #from numpy import ndarray
 from sklearn.ensemble import RandomForestClassifier
 
@@ -14,8 +15,9 @@ print "Parsing "+infile+"."
 file = open(infile,"r")   #open file in readonly mode
 data = numpy.genfromtxt(file,dtype='str',delimiter="\t") #strips data out of file, and creates ndarray of strings
 
-data = data[:,:-1]  #this is equal to data <- data[,1:(ncol(data)-1)]
 
+
+data = munger.deleteLastCol(data) #this is equal to data <- data[,1:(ncol(data)-1)]
 #COME BACK AND DO THIS HERE
 #data <- data[complete.cases(data),]
     #this looks for NA's
@@ -28,9 +30,13 @@ badVar=""
 data = data[data[:,1] != badVar] #Note ndarray is zero base, thus '1' is the second value
 
 #rf = RandomForestClassifier(n_estimators=10,max_features=None,oob_score=True) #was 10001 trees, but reduced for testing
-rf = RandomForestClassifier(n_estimators=101) #pure test, no extra stuff, to decrease time taken in processing
-data=data[1:]
-classifications=data[0:,1] #This is an array of the second column of the file, a text representation of the classification.
+
+rf = RandomForestClassifier(n_estimators=5) #pure test, no extra stuff, to decrease time taken in processing
+data = munger.deleteFirstRow(data) #removes first row
+#classifications_old=data[0:,1] #This is an array of the second column of the file, a text representation of the classification.
+classifications=munger.getNthCol(data,2)
+classifications=numpy.ravel(classifications) #reformat data into a 1-D array, instead of a slice.
+
 
 """TESTING AREA"""
 
@@ -59,8 +65,8 @@ classifications=data[0:,1] #This is an array of the second column of the file, a
 
 sizex=len(data[0])
 sizey=len(data)
-inputs=data[:sizey,2: ] #removes first and second column from all rows
-
+#inputs=data[:sizey,2: ] #removes first and second column from all rows
+inputs=munger.deleteColSequence(data,1,2)
 beforeTime=time.clock() 
 
 forest=rf.fit(inputs,classifications)
@@ -78,15 +84,27 @@ diffTime=afterTime-beforeTime
 #I think they are for human reading only; even then, not really.
 
 predict=forest.predict_proba(inputs)
+#predict=predict.reshape(6,)
 classes = forest.classes_
-print str(len(predict[0]))
-print str(len(predict))
+
+#predict=predict.transpose()
+print predict.shape
+print classes.shape
+
+#print str(len(predict[0]))
+#print str(len(predict))
+#predict=predict.transpose()
+#predict = predict.reshape(3759,6)
+#predict=numpy.concatenate((predict,classes))
+predict=numpy.vstack((classes,predict)) #add classes on top of 
+print predict
 
 outfileName=infile+".probabilities_refactor.txt"
 outfile = open(outfileName,"w")
-classes.tofile(outfile,sep="\t")
+#classes.tofile(outfile,sep="\t")
 #outfile.write("\n")
-predict.tofile(outfile,sep="\t")
+#predict.tofile(outfile,sep="\t")
+numpy.savetxt(outfile,predict,fmt="%s",delimiter="\t",newline="\n")
 outfile.close()
 
 
