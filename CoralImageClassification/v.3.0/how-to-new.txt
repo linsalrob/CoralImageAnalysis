@@ -1,0 +1,28 @@
+Notes before execution:
+This project is intended for execution on the Edwards server, specifically rambox.
+However, there is the packaged virtual python environment 'ramboxEnv' which should be able to emulate all the necessary modules.
+To execute this project it is necessary to have virtualenv installed.
+
+1. Navigate to the directory 'executionDir'
+2. activate your virtual python environment by using the following command: 
+	'source ../ramboxEnv/bin/activate'
+3. Next enter
+	'python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt  -o WLH1.output.txt'
+
+4. python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.allimages.txt
+
+5. python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.txt -a
+
+6. python ../src/featureDetection.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.txt
+
+7. perl ../src/join.pl ELH2.features.txt ELH2.all.txt > ELH2.all.features.txt
+
+8. Rscript ../src/randomForest.r WLH1.output.txt
+
+9. Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
+
+10. Rscript  ../src/randomForestTrainPredictNoTrim.r ELH2.all.features.txt
+
+11. python ../src/plot_predictions.py -f WLH1.output.txt.probabilities.txt -o WLH1.png
+
+12. perl ../src/concatenate.pl *all.features.txt > all.all.txt
