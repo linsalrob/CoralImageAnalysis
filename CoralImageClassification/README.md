@@ -9,9 +9,9 @@ Information about versions:
 
 
 **v.2.0**
--This was the 'latest' version as of January 2014
--Contains some errors, was not usable
--Missing critical files and information
+  -This was the 'latest' version as of January 2014
+  -Contains some errors, was not usable
+  -Missing critical files and information
 
 **v.3.0**
 -A continuation of the v.2.0. latest version as of July 2014
