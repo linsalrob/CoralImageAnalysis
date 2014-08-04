@@ -1,4 +1,4 @@
-V.3.0
+v.3.0
 ===================
 Latest version of Edwards Lab Coral Image Analysis project
 -------------------
