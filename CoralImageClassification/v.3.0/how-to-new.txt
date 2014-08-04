@@ -6,6 +6,9 @@ Note: If you are executing this on the Edwards server, I still recommend using t
 
 A more detailed discussion of what each of these commands do is available in the 'how-to-old.txt'.  This file is just a guide for the execution of the program.
 
+In addition, to run the program requires the 'Zawada' folder and all of its subdirectories be present within the 'data' folder.
+These are not included with the github package, and should be obtained from Rob.
+
 
 Step 1: 
 	Navigate to the directory 'executionDir'
@@ -35,6 +38,9 @@ Step 8:
 	Rscript ../src/randomForest.r WLH1.output.txt
 
 Step 9:
+	Note: LHM5.all.txt is an included file, which came from the 'previous_analysis' 	directory.  I am unsure how this file was generated, and have not been able to 		locate much information about what it describes.
+	I have included a copy of 'LHM5.all.txt' in the execution directory.
+
 	Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
 
 Step 10: 
