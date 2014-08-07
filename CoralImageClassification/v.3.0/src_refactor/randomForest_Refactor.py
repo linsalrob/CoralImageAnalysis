@@ -82,7 +82,8 @@ print classes.shape
 predict=numpy.vstack((classes,predict)) #add classes on top of predictions
 print predict
 
-outfileName=infile+".probabilities_refactor.txt"
+infile = infile[:-4] #remove .txt from file name
+outfileName=infile+".probabilities.tsv"
 outfile = open(outfileName,"w")
 numpy.savetxt(outfile,predict,fmt="%s",delimiter="\t",newline="\n")
 outfile.close()

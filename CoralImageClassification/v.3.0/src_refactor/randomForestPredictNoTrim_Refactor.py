@@ -60,6 +60,8 @@ classes = numpy.hstack(("Image File",classes))
 
 predict=numpy.hstack((names,predict))
 predict=numpy.vstack((classes,predict))
+
+infile = infile[:-4]    #clean up infile name, remove .txt
 outfileName = "probabilities/"+infile+".probabilities.txt"
 print "Wrote "+outfileName
 outfile = open(outfileName,"w")
