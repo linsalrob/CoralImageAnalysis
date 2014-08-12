@@ -9,7 +9,7 @@ import argparse
 import cv2
 import Classification
 import Contours
-
+from multiprocessing import Pool
 
 
 
@@ -116,6 +116,16 @@ def imageWriter(images,seen,args,fout,classification,stats,fft,lap,edge):
             for f in temp:
                 images.append(os.path.join(imgfile, f))
             continue
+        
+        #rewrite of above if statement
+        #if os.path.isdir(os.path.join(args.directory,imgfile)):
+        #    temp = os.listdir(os.path.join(args.directory,imgfile))
+        #    pool = Pool()
+        #    pool.map(images.append, os.path.join(imgfile, f))
+        #    pool.close()
+        #    pool.join()
+        #    continue
+            
 
         if not args.all and imgfile not in classification:
             continue

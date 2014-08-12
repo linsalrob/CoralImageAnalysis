@@ -64,7 +64,8 @@ sizex=len(data[0])
 sizey=len(data)
 inputs=munger.deleteColSequence(data,1,2)
 
-beforeTime=time.clock() 
+beforeTime=time.clock()
+#print classifications
 forest=rf.fit(inputs,classifications)
 afterTime=time.clock()
 diffTime=afterTime-beforeTime
@@ -73,7 +74,7 @@ print "Time taken to fit forest: "+str(diffTime)
 #Skipped drawing the png images.
 #I think they are for human reading only; even then, not really.
 
-predict=forest.predict_proba(inputs)
+predict = forest.predict_proba(inputs)
 classes = forest.classes_
 
 print predict.shape
