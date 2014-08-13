@@ -4,10 +4,12 @@ library('randomForest')
 # is we always set the same seed we will always get the same result
 set.seed(113) 
 
-for (name in c("ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "NKH.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt")) {
+#for (name in c("ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "NKH.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt")) {
+	for (name in c("ELH2.all.features.txt")){
 	rffile = paste("rf/", name, ".rf.bin", sep="")
 	load(rffile)
-	for (oname in c("ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "NKH.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt")) {
+	#for (oname in c("ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "NKH.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt")) {
+		for (oname in c("ELH2.all.features.txt")){
 		datafile = oname
 		print(paste("Comparing ", name, ".rf.bin and ", oname, sep=""))
 		data <- read.delim(datafile)
