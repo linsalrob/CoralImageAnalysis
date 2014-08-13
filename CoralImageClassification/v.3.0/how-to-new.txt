@@ -48,7 +48,7 @@ Step 9:
 	Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
 
 Step 10: 
-	python ../src_refactor/randomForestTrainPredict_Refactor.py ELH2.all.features.tsv
+	python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py ELH2.all.features.tsv
 
 Step 11: 
 	python ../src/plot_predictions.py -f WLH1.output.probabilities.tsv -o WLH1.png
@@ -59,8 +59,8 @@ Step 12:
 Step 13:
 	mv *all.features.tsv all_features/
 
+
+NOT IMPLEMENTED YET.
 Step 14:
 	for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$i.all.features.txt $i.data.txt; done
-
-Step 15:
 
