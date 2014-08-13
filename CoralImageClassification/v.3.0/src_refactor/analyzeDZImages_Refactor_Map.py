@@ -119,17 +119,7 @@ def imageWriter(imgfile,images):
         for f in temp:
             images.append(os.path.join(imgfile, f))
         return
-    
-    #rewrite of above if statement
-    #if os.path.isdir(os.path.join(args.directory,imgfile)):
-    #    temp = os.listdir(os.path.join(args.directory,imgfile))
-    #    pool = Pool(4)
-    #    pool.map(images.append, os.path.join(imgfile, f))
-    #    pool.close()
-    #    pool.join()
-    #    return
         
-    
     if not args.all and imgfile not in classification:
         return
     
@@ -182,7 +172,6 @@ def imageWriter(imgfile,images):
     for i in range(25):
         t2 = 10*i
         fout.write( str(edge.sumCanny(ngray, 1, t2)) + "\t")
-    #edge.sumCanny(gray)
     
     # Contour detection
     ctr = Contours.contours(ngray)
@@ -206,7 +195,7 @@ def imageWriter(imgfile,images):
     
     
 def imageWriter_map_revision(imgfile):
-    retStrings = []
+    retStrings = [] #captures strings for writing at the end of the entire process.
     
     if imgfile in seen:
         return
@@ -216,16 +205,6 @@ def imageWriter_map_revision(imgfile):
         for f in temp:
             images.append(os.path.join(imgfile, f))
         return
-   
-    
-    #rewrite of above if statement
-    #if os.path.isdir(os.path.join(args.directory,imgfile)):
-    #    temp = os.listdir(os.path.join(args.directory,imgfile))
-    #    pool = Pool(4)
-    #    pool.map(images.append, os.path.join(imgfile, f))
-    #    pool.close()
-    #    pool.join()
-
   
     if not args.all and imgfile not in classification:
         return
@@ -241,57 +220,43 @@ def imageWriter_map_revision(imgfile):
     if args.verbose:
         sys.stderr.write("Parsing " + imgfile + "\n")
     
-    #fout.write( imgfile + "\t" )
     retStrings.append( imgfile + "\t" )
     if imgfile in classification:
-        #fout.write( classification[imgfile] + "\t")
         retStrings.append( classification[imgfile] + "\t" )
     else:
-        #fout.write( "unknown\t" )
         retStrings.append( "unknown"+ "\t" )
     
     img = ImageIO.cv2read(os.path.join(args.directory, imgfile))
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    #fout.write( ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))) + "\t" )
     retStrings.append( ('\t'.join(map(str, [stats.min(gray), stats.max(gray), stats.median(gray), stats.mean(gray)]))) + "\t" )
     
     ngray = Normalization.equalizeHistograms(gray)
     # apply a gaussian blur to remove edge effects
     ngray = cv2.GaussianBlur(ngray, (3,3), 0)
-    #fout.write( ('\t'.join(map(str, [stats.min(ngray), stats.max(ngray), stats.median(ngray), stats.mean(ngray)]))) + "\t")
     retStrings.append( ('\t'.join(map(str, [stats.min(ngray), stats.max(ngray), stats.median(ngray), stats.mean(ngray)]))) + "\t" )
     
     for i in range(3):
         imp = img[:,:,i]
-        #fout.write( ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))) + "\t" )
         retStrings.append( ('\t'.join(map(str, [stats.min(imp), stats.max(imp), stats.median(imp), stats.mean(imp)]))) + "\t" )
-    #fout.write( str(fft.energy(gray)) + "\t" + str(fft.energy(ngray)) + "\t")
     retStrings.append( str(fft.energy(gray)) + "\t" + str(fft.energy(ngray)) + "\t" )
     
     if args.features:
         feats.detect_kp_ORB(ngray)
-        #fout.write( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t")
         retStrings.append( str(feats.numberKeyPoints()) + "\t" + str(feats.medianKeyPointSize()) + "\t" + str(feats.meanKeyPointSize()) + "\t" )
         for i in range(15):
-            #fout.write( str(feats.numKeyPoints(i*10)) + "\t")
             retStrings.append( str(feats.numKeyPoints(i*10)) + "\t" )
     else:
-        #fout.write("0\t0\t0\t");
         retStrings.append( "0\t0\t0\t" )
         for i in range(15):
-            #fout.write("0\t")
             retStrings.append( "0\t" )
     
     for i in range(15):
         k=2*i+1
-        #fout.write( str(lap.sum(ngray, k)) + "\t")
         retStrings.append( str(lap.sum(ngray, k)) + "\t" )
     
     for i in range(25):
         t2 = 10*i
-        #fout.write( str(edge.sumCanny(ngray, 1, t2)) + "\t")
         retStrings.append( str(edge.sumCanny(ngray, 1, t2)) + "\t" )
-    #edge.sumCanny(gray)
     
     # Contour detection
     ctr = Contours.contours(ngray)
@@ -299,18 +264,13 @@ def imageWriter_map_revision(imgfile):
         threshold=50*i
         ctr.withCanny(1, threshold)
         if ctr.numberOfContours() == 0:
-            #fout.write( "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t" )
             retStrings.append( "0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t" )
         else:
             try:
-                #fout.write( "\t".join(map(str, [ctr.numberOfContours(), ctr.numberOfClosedContours(),
-                #                      ctr.numberOfOpenContours(), ctr.totalContourArea(), cv2.contourArea(ctr.largestContourByArea()),
-                #                     ctr.totalPerimeterLength()])) + "\t")
                 retStrings.append( "\t".join(map(str, [ctr.numberOfContours(), ctr.numberOfClosedContours(),
                                       ctr.numberOfOpenContours(), ctr.totalContourArea(), cv2.contourArea(ctr.largestContourByArea()),
                                       ctr.totalPerimeterLength()])) + "\t")
                 ctr.linelengths()
-                #fout.write( "\t".join(map(str, [ctr.maxLineLength(), ctr.meanLineLength(), ctr.medianLineLength(), ctr.modeLineLength()])) + "\t")
                 retStrings.append( "\t".join(map(str, [ctr.maxLineLength(), ctr.meanLineLength(), ctr.medianLineLength(), ctr.modeLineLength()])) + "\t" )
             except Exception as e:
                 sys.stderr.write("There was an error calculating the contours for " + imgfile +": " + e.message + "\n")
@@ -335,7 +295,6 @@ def testMain():     #main function with log message and time captures.
     msg = "Arg Processing took: "+str(diff)+" seconds."
     log.append(msg)
     
-    #print args
     # # # # #
     
     start = t.time()
@@ -355,12 +314,7 @@ def testMain():     #main function with log message and time captures.
     diff= end-start
     msg = "Module Init took: "+str(diff)+" seconds."
     log.append(msg)
-    
-    #print stats
-    #print fft
-    #print lap
-    #print edge
-    #print feats
+
     # # # # #
     
     start = t.time()
@@ -372,10 +326,7 @@ def testMain():     #main function with log message and time captures.
     msg = "Classification handling took: "+str(diff)+" seconds."
     log.append(msg)
     
-    #print classification
     # # # # #
-    
-    #global 
     
     start = t.time()
     global fout
@@ -388,9 +339,7 @@ def testMain():     #main function with log message and time captures.
     diff= end-start
     msg = "Output Handling took: "+str(diff)+" seconds."
     log.append(msg)
-    
-    #print "Fout: "+str(fout)
-    #print "Seen: "+str(seen)
+
     # # # # #
     
     start = t.time()
@@ -409,20 +358,7 @@ def testMain():     #main function with log message and time captures.
             #this for loop just constructs this specific argument for each file.
     
     stringsToPrint = []  #a general container to maintain a 'persistant' list of the returned strings
-    #num = len(imagesSubDirectories)
-    #size = str(num)
-    #current = 1
-    #i=0
-    #while i < 10:
-    #  print imagesSubDirectories[i]
-    #  i+=1
-    
-    #i=0 
-    #while i < 10:
-    #    print imagesSubDirectories[num-1-i]
-    #    i+=1
-
-    print "Num files: "+str(len(imagesSubDirectories))
+    #print "Num files: "+str(len(imagesSubDirectories))
     ret = []
     numProcesses = 8
     pool = Pool(numProcesses)
@@ -430,7 +366,6 @@ def testMain():     #main function with log message and time captures.
     stringsToPrint.append(ret)
     pool.close()
     pool.join()
-    #current += 1
     
     #prints the strings returned in 'stringsToPrint'
     fout=open(args.output, 'a')
@@ -452,7 +387,7 @@ def testMain():     #main function with log message and time captures.
         outfile.write("\n")
     outfile.close()
   
-def mainFunc():   #uncluttered main function for analyzeDZImages
+def mainFunc():   #depricated way of doing calculations, does not employ paralell processing
     global args
     args = argProcessor()
     if not args.file:
@@ -480,12 +415,7 @@ def mainFunc():   #uncluttered main function for analyzeDZImages
     images = os.listdir(args.directory)
     for imgfile in images:
         print "imgfile is: "+imgfile
-        imageWriter(imgfile,images)
-    #args = [images,seen,args,fout,classification,stats,fft,lap,edge]
-    #pool = Pool(8)
-    #pool.map(imageWriter,images)  
-    #pool.close()
-    #pool.join()    
+        imageWriter(imgfile,images)   
     
     
 if __name__ == '__main__':

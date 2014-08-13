@@ -18,13 +18,13 @@ Step 2:
 	source ../ramboxEnv/bin/activate
 
 Step 3:
-	python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt  -o WLH1.output.tsv
+	python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -o WLH1.output.tsv
 
 Step 4:
-	python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.allimages.tsv
+	python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.allimages.tsv
 
 Step 5:
-	python ../src/analyzeDZImages.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.tsv -a
+	python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.tsv -a
 
 Step 6:
 	python ../src/featureDetection.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv
@@ -35,23 +35,32 @@ Step 7:
  	locate much information about what it describes.
 	I have included a copy of 'ELH2.all.txt' in the execution directory.
 
-	perl ../src/join.pl ELH2.features.tsv ELH2.all.tsv > ELH2.all.features.tsv
+	perl ../src/join.pl ELH2.features.tsv ELH2.all.txt > ELH2.all.features.tsv
 
 Step 8:
-	Rscript ../src/randomForest.r WLH1.output.tsv
+	python ../src_refactor/randomForest_Refactor.py WLH1.output.tsv
 
 Step 9:
 	Note: LHM5.all.txt is an included file, which came from the 'previous_analysis'
  	directory.  I am unsure how this file was generated, and have not been able to 		locate much information about what it describes.
 	I have included a copy of 'LHM5.all.txt' in the execution directory.
 
-	Rscript ../src/randomForestTrainPredict.r LHM5.all.tsv
+	Rscript ../src/randomForestTrainPredict.r LHM5.all.txt
 
 Step 10: 
-	Rscript  ../src/randomForestTrainPredictNoTrim.r ELH2.all.features.tsv
+	python ../src_refactor/randomForestTrainPredict_Refactor.py ELH2.all.features.tsv
 
 Step 11: 
 	python ../src/plot_predictions.py -f WLH1.output.probabilities.tsv -o WLH1.png
 
 Step 12: 
 	perl ../src/concatenate.pl *all.features.tsv > all.all.tsv
+
+Step 13:
+	mv *all.features.tsv all_features/
+
+Step 14:
+	for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$i.all.features.txt $i.data.txt; done
+
+Step 15:
+

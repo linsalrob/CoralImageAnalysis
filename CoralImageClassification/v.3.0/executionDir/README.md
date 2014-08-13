@@ -9,4 +9,5 @@ The files 'bundleScript.py' and 'bundleScript_Refactor.py' are both experimental
 'bundleScript.py' uses the old implementations of the scripts, i.e. the ones written in R.
 'bundleScript_Refactor.py' uses some new implementaitons of the scripts. i.e. ones which have been rewritten into Python.
 
-
+The folder 'data' does not come packaged with files for analysis.  
+See the README.md within 'data' for more information about required file structure.

@@ -30,7 +30,7 @@ onames=["ELH2.all.features.txt"]
 for name in names:
     rffile = "rf/"+name+".rf.bin"
     with open(rffile,"rb") as f:
-        forest = cPickle.load(f)
+       RandomForestClassifier forest = cPickle.load(f)
         
     #forestData = open(rffile,'rb')
     #forest=pickle.load(forestData)
