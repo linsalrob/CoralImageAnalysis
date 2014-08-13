@@ -5,7 +5,7 @@ To execute this project it is necessary to have virtualenv installed.
 Note: If you are executing this on the Edwards server, I still recommend using the 'ramboxEnv' because the server's python modules are out of date and cause problems with execution.
 The new program uses'.tsv' to better describe what the files are, however, they are fundamentally the same.
 
-A more detailed discussion of what each of these commands do is available in the 'how-to-old.txt'.  This file is just a guide for the execution of the program.
+A more detailed discussion of what each of these commands do is available in the 'how-to-old.txt'.  The how-to-new file is just a guide for the execution of the program.
 
 In addition, to run the program requires the 'Zawada' folder and all of its subdirectories be present within the 'data' folder.
 These are not included with the github package, and should be obtained from Rob.
