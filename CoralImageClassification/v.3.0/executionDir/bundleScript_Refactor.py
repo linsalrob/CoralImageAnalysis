@@ -22,7 +22,9 @@ scripts = [
 "perl ../src/join.pl ELH2.features.tsv ELH2.all.txt > ELH2.all.features.tsv",
 "python ../src_refactor/randomForest_Refactor.py WLH1.output.tsv",
 "Rscript ../src/randomForestTrainPredict.r LHM5.all.txt",
-"python ../src_refactor/randomForestTrainPredict_Refactor.py ELH2.all.features.tsv",
+#"python ../src_refactor/randomForestTrainPredict_Refactor.py ELH2.all.features.tsv",
+#This is not implemented yet ^
+"python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py ELH2.all.features.tsv",
 "python ../src/plot_predictions.py -f WLH1.output.probabilities.tsv -o WLH1.png"] #reflects better naming conventions.
 
 for script in scripts:

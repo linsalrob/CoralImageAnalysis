@@ -41,8 +41,11 @@ diffTime=afterTime-beforeTime
 print "Time taken to fit forest: "+str(diffTime)
 
 forestFileName="rf/"+infile+".rf.bin"
-with open(forestFileName,'wb') as f:
-    cPickle.dump(forest,f)
+
+outForest = open(forestFileName,'wb')
+cPickle.dump(forest,outForest)
+#with open(forestFileName,'wb') as f:
+    #cPickle.dump(forest,f)
 
 #This is how you open the pickled randomForest
 #with open(forestFileName,'rb') as f:

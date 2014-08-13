@@ -20,18 +20,19 @@ from sklearn.ensemble import RandomForestClassifier
 #I checked against the files which are produced from a 'sucessful run' of the program, and it does not generate data for the EKC or NKH data sets.
 # removed the "EKC.data.txt" and "NKH.data.txt" accordingly.
 
-#names = ["ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt"]
-#onames = ["ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt"]
+names = ["ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt"]
+onames = ["ELH1.data.txt", "ELH2.data.txt", "LHM5.data.txt", "WLH1.data.txt", "WLH2.data.txt", "all.txt"]
 
 #For testing in src_refactor, names have been abbreviated to one case.
-names=["ELH2.all.features.txt"]
-onames=["ELH2.all.features.txt"]
+#names=["ELH2.all.features.tsv"]
+#onames=["ELH2.all.features.tsv"]
 
 for name in names:
     rffile = "rf/"+name+".rf.bin"
     with open(rffile,"rb") as f:
-       RandomForestClassifier forest = cPickle.load(f)
-        
+        forest = None
+        forest = cPickle.load(f)
+    print forest.classes_
     #forestData = open(rffile,'rb')
     #forest=pickle.load(forestData)
     #print forest
@@ -41,13 +42,20 @@ for name in names:
         print "Comparing "+name+".rf.bin"+" and "+oname
         file = open(fileName,"r")   #open file in readonly mode
         data = numpy.genfromtxt(file,dtype='str',delimiter="\t") #strips data out of file, and creates ndarray of strings
+        fileNames = munger.getFirstCol(data) #save file names
+        data = munger.deleteFirstCol(data) #remove file names
+        data = munger.deleteFirstCol(data) #remove file classes
+        data = munger.deleteFirstRow(data) #remove labels
         #skipped na.omit(data) equivalent here, I don't believe this check is needed.
         #may need data munging here to get it to fit into the forest nicely
+        print data
         p = forest.predict_proba(data)
         classes = forest.classes_
         namedp=numpy.vstack((classes,p))
+        firstCol = numpy.vstack(("Image File",fileNames))
+        namedp = numpy.hstack((fileNames,namedp))
         #classes = numpy.hstack(("Image File",classes))
-        outtext = oname+"_data."+name+"_rf.probabilities.txt"
+        outtext = oname+"_data."+name+"_rf.probabilities.tsv"
         outfile = open(outtext,"w")
         numpy.savetxt(outfile,namedp,fmt="%s",delimiter="\t",newline="\n")
         outfile.close()
