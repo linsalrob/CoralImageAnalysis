@@ -73,7 +73,7 @@ def imageHandler(args,fout,seen,feats,images):
         fout.write("\n")
 
 def testMain():
-    print "started!"
+    #print "started!"
     args = argProcessor()
     feats=Features()
     fout=None;

@@ -27,7 +27,7 @@ Step 5:
 	python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.tsv -a
 
 Step 6:
-	python ../src/featureDetection.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv
+	python ../src_refactor/featureDetection_Refactor_Map.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv
 
 Step 7:
 	Note: ELH2.all.txt is an included file, which came from the 'previous_analysis'

@@ -18,7 +18,7 @@ scripts = [
 "python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -o WLH1.output.tsv",
 "python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -a -o WLH1.allimages.tsv",
 "python ../src_refactor/analyzeDZImages_Refactor_Map.py -d /data/Zawada/ATRIS_images/WLH1 -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsA.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsB_1_3.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsC.txt -f /data/Zawada/ATRIS_images/PROCESSED/WLH1/WLH1_classificationsD.txt -o WLH1.all.tsv -a",
-"python ../src/featureDetection.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv",
+"python ../src_refactor/featureDetection_Refactor_Map.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv",
 "perl ../src/join.pl ELH2.features.tsv ELH2.all.txt > ELH2.all.features.tsv",
 "python ../src_refactor/randomForest_Refactor.py WLH1.output.tsv",
 "Rscript ../src/randomForestTrainPredict.r LHM5.all.txt",
