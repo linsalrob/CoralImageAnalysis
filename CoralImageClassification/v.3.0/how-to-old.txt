@@ -56,6 +56,7 @@ for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$
 
 # now calculate all the random forests. Note that we save the random forest in the rf/ directory so we can use it for predictions later.
 
+#Note, seems to just output statistics about forest, not any data
 for i in ELH1  LHM5  WLH1  WLH2; do Rscript ../src/randomForestTrainPredictNoTrim.r $i.data.txt > rf_output/$i.rf.out.txt; done
 
 

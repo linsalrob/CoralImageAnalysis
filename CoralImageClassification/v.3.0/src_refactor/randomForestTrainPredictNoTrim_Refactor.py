@@ -20,21 +20,27 @@ print "Data set of images: "+infile+"."
 file = open(infile,"r")   #open file in readonly mode
 data = numpy.genfromtxt(file,dtype='str',delimiter="\t") #strips data out of file, and creates ndarray of strings
 
-badVar=""   #!!!Note: original version looked for 'Unknown' as the token which indicated an undesirable row.
+badVarSpc=""   #!!!Note: original version looked for 'Unknown' as the token which indicated an undesirable row.
             #However, I looked at the ELH2.all.features.txt in 'previous_analysis' and it looks blanks indicate that 
             #a row is not classified.
-training = data[data[:,1] != badVar]
+badVarUnk="Unknown"
+training = data[data[:,1] != badVarSpc] #check data for spaces
+training = training[training[:,1] != badVarUnk] #check remaining values for 'unknown' values
+
 training = munger.deleteFirstRow(training)  #removes first row (info about what columns are)
 
 rf = RandomForestClassifier(n_estimators=501,max_features=8,oob_score=True,n_jobs=4,random_state=113) #was 10001 trees, but reduced for testing
 #rf = RandomForestClassifier(n_estimators=10) #pure for test, no extra stuff, to decrease time taken in processing
 
-classifications=munger.getNthCol(training,2)    
-classifications=numpy.ravel(classifications) #Flatten into a 1D array
-
-inputs=munger.deleteColSequence(training,1,2) #training set has classifications, so just remove first two columns (file name and classification)
+inputs = training 
+inputs = inputs[~(inputs=='nan').any(axis=1)]  #check for any columns with 'nan' data, if found, delete the row containg the column.
+classifications=munger.getNthCol(inputs,2)
+inputs = munger.deleteColSequence(inputs,1,2) #delete image names and classifications.
+inputs = inputs.astype(float) 
+classifications = numpy.ravel(classifications) #Flatten into a 1D array
 
 beforeTime=time.clock() 
+#forest=rf.fit(inputs,classifications)
 forest=rf.fit(inputs,classifications)
 afterTime=time.clock()
 diffTime=afterTime-beforeTime
@@ -52,12 +58,12 @@ cPickle.dump(forest,outForest)
 #    testForest = cPickle.load(f)
 
 
-data = munger.deleteFirstRow(data)
-#namesAndClasses = munger.getColSequence(data,1,2)
-names = munger.getFirstCol(data)
-data = munger.deleteColSequence(data,1,2)
+data = munger.deleteFirstRow(data) #clean off column descriptors
+data = data[~(data=='nan').any(axis=1)] #check data for 'nan's and remove row if found
+names = munger.getFirstCol(data) #get names for picture which row describes
+data = munger.deleteColSequence(data,1,2) #delete names and classifications.
 
-predict=forest.predict_proba(data)
+predict = forest.predict_proba(data)
 classes = forest.classes_
 classes = numpy.hstack(("Image File",classes))
 
