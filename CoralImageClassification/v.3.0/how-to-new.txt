@@ -73,4 +73,4 @@ Step 17:
 	python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py all.data.tsv > rf_output/all.rf.out
 
 Note:
-Some steps contained in 'how-to-old.txt' have been skipped in the 'how-to-new.txt'. I felt the skipped pieces did not contribute much meaningful data or information.  However, it may be worth revisiting these at a later point.
+Some steps contained in 'how-to-old.txt' have been skipped in the 'how-to-new.txt'. I felt the skipped pieces did not contribute much meaningful data or information.  However, it may be worth revisiting these sections at a later point.

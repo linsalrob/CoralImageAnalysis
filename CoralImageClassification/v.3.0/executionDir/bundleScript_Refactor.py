@@ -22,7 +22,7 @@ scripts = [
 #"python ../src_refactor/featureDetection_Refactor_Map.py -d /data/Zawada/ATRIS_images/ELH2/ -o ELH2.features.tsv",
 #"perl ../src/join.pl ELH2.features.tsv ELH2.all.txt > ELH2.all.features.tsv",
 "python ../src_refactor/randomForest_Refactor.py WLH1.output.tsv",
-"Rscript ../src/randomForestTrainPredict.r LHM5.all.txt",
+"Rscript ../src/randomForestTrainPredict.r LHM5.all.txt", #I'm not sure if this is needed.
 #"python ../src_refactor/randomForestTrainPredict_Refactor.py ELH2.all.features.tsv",
 #This is not implemented yet ^
 "python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py ELH2.all.features.tsv",
