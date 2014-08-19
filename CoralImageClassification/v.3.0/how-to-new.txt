@@ -59,8 +59,18 @@ Step 12:
 Step 13:
 	mv *all.features.tsv all_features/
 
-
-NOT IMPLEMENTED YET.
 Step 14:
-	for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$i.all.features.txt $i.data.txt; done
+	for i in ELH1 ELH2 LHM5 WLH1 WLH2; do perl ../src/clean_output.pl all_features/$i.all.features.tsv $i.data.tsv; done
 
+Step 15:
+	for i in ELH1  LHM5  WLH1  WLH2; do python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py $i.data.tsv > rf_output/$i.rf.out.tsv; done
+
+
+Step 16:
+	perl ../src/concatenate.pl *.data.tsv > all.data.tsv
+
+Step 17:
+	python ../src_refactor/randomForestTrainPredictNoTrim_Refactor.py all.data.tsv > rf_output/all.rf.out
+
+Note:
+Some steps contained in 'how-to-old.txt' have been skipped in the 'how-to-new.txt'. I felt the skipped pieces did not contribute much meaningful data or information.  However, it may be worth revisiting these at a later point.
