@@ -10,7 +10,8 @@ scripts = [
 "rm png/*",
 "rm probabilities/*",
 "rm rf/*",
-"rm rf_output/*"]
+"rm rf_output/*",
+"rm *.probabilities.txt"]
 
 for script in scripts:
     try:
