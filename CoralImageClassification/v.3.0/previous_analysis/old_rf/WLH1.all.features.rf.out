@@ -1,0 +1,26 @@
+[1] "Data set of images : WLH1.all.features.txt"
+
+Call:
+ randomForest(x = training[, 3:ncol(training)], y = training[,      2], importance = TRUE, ntrees = 100001) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 11
+
+        OOB estimate of  error rate: 17.65%
+Confusion matrix:
+                  Carbonate sand Coral rubble Indeterminate Live reef
+Carbonate sand              1941          139             3         2
+Coral rubble                 126         1129             0         0
+Indeterminate                  2            0           100         4
+Live reef                     17            0             2         8
+Senile coral reef             67          178             0         0
+Thalassia                      0            3             0         0
+                  Senile coral reef Thalassia class.error
+Carbonate sand                   98         0  0.11085662
+Coral rubble                    449         0  0.33744131
+Indeterminate                     1         0  0.06542056
+Live reef                         0         0  0.70370370
+Senile coral reef              1912         0  0.11358368
+Thalassia                         0         0  1.00000000
+null device 
+          1 
