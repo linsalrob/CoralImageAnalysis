@@ -58,7 +58,10 @@ class FFT:
 class Features:
     '''An internal class to extract some information based on the number of keypoints in the image.
 
-    We use SURF feature detection to extract the laplacian and the hessians of the image'''
+    We use SURF feature detection to extract the laplacian and the hessians of the image.
+
+    NOTE: SURF is patented and you are supposed to pay for it. However, ORB is completely open and so it has replaced SURF in cv2.
+    For more information see http://docs.opencv.org/trunk/doc/py_tutorials/py_feature2d/py_orb/py_orb.html'''
     
     def __init__(self):
         self.img = None
@@ -148,7 +151,8 @@ class Laplacian:
     def sum(self, img, kernel=9):
         gl = self.calculate(img, kernel, cv2.CV_16U)
         # count the number of points > 1 (i.e. that are edges)
-        glo = gl > 10
+        ## RAE: 8/7/13: before this was 10?? glo = gl > 10
+        glo = gl > 1
         # return the number of True points
         return numpy.sum(glo)
 

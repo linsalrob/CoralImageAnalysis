@@ -23,7 +23,11 @@ close IN;
 opendir(DIR, $dir) || die "Can't open $dir";
 my %allrfs; my $crossvalidation;
 foreach my $f (sort {$a cmp $b} grep {$_ !~ /^\./} readdir(DIR)) {
-	open(IN, "$dir/$f") || die "Can't open $dir/$f";
+	if ($f =~ /\.gz$/) {
+		open(IN, "gunzip -c $dir/$f |") || die "can't open a pipe to gunzip -c $dir/$f";
+	} else {
+		open(IN, "$dir/$f") || die "Can't open $dir/$f";
+	}
 	my $header;
 	my $count=0;
 	my $correct=0;
