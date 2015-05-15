@@ -1,0 +1,5 @@
+Image File	NumberKeyPoints	MedianKPSize	MeanKPSize	KPsOver0	KPsOver10	KPsOver20	KPsOver30	KPsOver40	KPsOver50	KPsOver60	KPsOver70	KPsOver80	KPsOver90	KPsOver100	KPsOver110	KPsOver120	KPsOver130	KPsOver140
+
+LINE 2	NumberKeyPoints	MedianKPSize	MeanKPSize	KPsOver0	KPsOver10	KPsOver20	KPsOver30	KPsOver40	KPsOver50	KPsOver60	KPsOver70	KPsOver80	KPsOver90	KPsOver100	KPsOver110	KPsOver120	KPsOver130	KPsOver140
+
+LINE 3	NumberKeyPoints	MedianKPSize	MeanKPSize	KPsOver0	KPsOver10	KPsOver20	KPsOver30	KPsOver40	KPsOver50	KPsOver60	KPsOver70	KPsOver80	KPsOver90	KPsOver100	KPsOver110	KPsOver120	KPsOver130	KPsOver140

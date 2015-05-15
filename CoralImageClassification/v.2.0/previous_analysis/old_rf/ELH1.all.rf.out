@@ -1,0 +1,30 @@
+[1] "Data set of images : ELH1.all.features.txt"
+
+Call:
+ randomForest(x = training[, 3:ncol(training)], y = training[,      2], importance = TRUE, ntrees = 100001) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 11
+
+        OOB estimate of  error rate: 25.88%
+Confusion matrix:
+                  Carbonate sand Coral rubble Indeterminate Mixed Seagrasses
+Carbonate sand              2869          520            39     1          0
+Coral rubble                 308         3601            21    40          0
+Indeterminate                 26           32           795     0          0
+Mixed                          3          125             0   769          0
+Seagrasses                     0            1             1     1          0
+Senile coral reef             96          872            32     9          0
+Syringodium                    2           45             0    20          0
+Thalassia                      7           92             0   113          0
+                  Senile coral reef Syringodium Thalassia class.error
+Carbonate sand                  177           1         1   0.2048226
+Coral rubble                    902           1        51   0.2686840
+Indeterminate                    68           0         0   0.1368078
+Mixed                            53           3        67   0.2460784
+Seagrasses                        0           0         0   1.0000000
+Senile coral reef              2561           0         8   0.2842370
+Syringodium                       9          46         2   0.6290323
+Thalassia                        52           0       244   0.5196850
+null device 
+          1 
